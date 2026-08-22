@@ -9,9 +9,9 @@ const restartButton = document.getElementById("restart");
 
 // PHONE BUTTONS
 const upButton = document.getElementById("up");
-const downButton = document.getElementById("right");
+const downButton = document.getElementById("down");
 const leftButton = document.getElementById("left");
-const rightButton = document.getElementById("down");
+const rightButton = document.getElementById("right");
 
 
 // ========================================
@@ -20,9 +20,10 @@ const rightButton = document.getElementById("down");
 
 const MAX_APPLES = 10;
 
-// SPEED IS NOW 10
+// CAT SPEED
 const speed = 10;
 
+// STARTING LIVES
 const STARTING_LIVES = 5;
 
 
@@ -48,10 +49,10 @@ let snakes = [];
 
 
 // ========================================
-// PHONE MOVEMENT
+// MOVEMENT STATE
 // ========================================
 
-let phoneDirection = {
+const movement = {
     up: false,
     down: false,
     left: false,
@@ -64,7 +65,6 @@ let phoneDirection = {
 // ========================================
 
 function updateCat() {
-
     cat.style.left = catX + "px";
     cat.style.top = catY + "px";
 }
@@ -139,9 +139,7 @@ function createApples() {
     apples = [];
 
     for (let i = 0; i < MAX_APPLES; i++) {
-
         createApple();
-
     }
 }
 
@@ -155,8 +153,6 @@ function createSnake() {
     const snake = document.createElement("div");
 
     snake.className = "snake";
-
-    // SMALL SNAKE
     snake.textContent = "🐍";
 
     const position = randomPosition(35, 25);
@@ -171,34 +167,26 @@ function createSnake() {
         element: snake,
 
         x: position.x,
-        y: position.y,
-
-        dx: Math.random() < 0.5 ? 2 : -2,
-        dy: Math.random() < 0.5 ? 2 : -2
+        y: position.y
 
     });
 }
 
 
 // ========================================
-// CREATE SNAKES
+// CREATE 4 SNAKES
 // ========================================
 
 function createSnakes() {
 
     snakes.forEach(snake => {
-
         snake.element.remove();
-
     });
 
     snakes = [];
 
-    // 4 small snakes
     for (let i = 0; i < 4; i++) {
-
         createSnake();
-
     }
 }
 
@@ -210,15 +198,10 @@ function createSnakes() {
 function isColliding(rect1, rect2) {
 
     return (
-
         rect1.left < rect2.right &&
-
         rect1.right > rect2.left &&
-
         rect1.top < rect2.bottom &&
-
         rect1.bottom > rect2.top
-
     );
 }
 
@@ -250,52 +233,72 @@ function checkAppleCollision() {
 
             scoreDisplay.textContent = score;
 
-            // WIN
             if (score >= MAX_APPLES) {
-
                 endGame(true);
-
             }
-
         }
-
     });
 }
 
 
 // ========================================
-// MOVE SNAKES
+// MOVE SNAKES TOWARD CAT
 // ========================================
 
 function moveSnakes() {
 
     if (!gameRunning) return;
 
+    // SNAKE SPEED
+    // Lower number = slower snake
+    const snakeSpeed = 1.2;
+
     snakes.forEach(snake => {
 
-        snake.x += snake.dx;
-        snake.y += snake.dy;
+        // CAT CENTER
+        const catCenterX = catX + 30;
+        const catCenterY = catY + 30;
 
-        // LEFT / RIGHT WALL
-        if (
-            snake.x <= 0 ||
-            snake.x >= game.clientWidth - 35
-        ) {
+        // SNAKE CENTER
+        const snakeCenterX = snake.x + 17;
+        const snakeCenterY = snake.y + 12;
 
-            snake.dx *= -1;
+        // DISTANCE FROM SNAKE TO CAT
+        const dx = catCenterX - snakeCenterX;
+        const dy = catCenterY - snakeCenterY;
+
+        const distance =
+            Math.sqrt(dx * dx + dy * dy);
+
+        // CRAWL TOWARD CAT
+        if (distance > 0) {
+
+            snake.x +=
+                (dx / distance) * snakeSpeed;
+
+            snake.y +=
+                (dy / distance) * snakeSpeed;
 
         }
 
-        // TOP / BOTTOM WALL
-        if (
-            snake.y <= 0 ||
-            snake.y >= game.clientHeight - 25
-        ) {
+        // KEEP SNAKE INSIDE GAME
+        snake.x = Math.max(
+            0,
+            Math.min(
+                snake.x,
+                game.clientWidth - 35
+            )
+        );
 
-            snake.dy *= -1;
+        snake.y = Math.max(
+            0,
+            Math.min(
+                snake.y,
+                game.clientHeight - 25
+            )
+        );
 
-        }
-
+        // UPDATE SNAKE POSITION
         snake.element.style.left =
             snake.x + "px";
 
@@ -314,9 +317,7 @@ let hitCooldown = false;
 
 function checkSnakeCollision() {
 
-    if (!gameRunning) return;
-
-    if (hitCooldown) return;
+    if (!gameRunning || hitCooldown) return;
 
     const catRect =
         cat.getBoundingClientRect();
@@ -331,9 +332,7 @@ function checkSnakeCollision() {
             loseLife();
 
             break;
-
         }
-
     }
 }
 
@@ -352,19 +351,17 @@ function loseLife() {
 
     livesDisplay.textContent = lives;
 
-    // Move cat back to starting position
+    // MOVE CAT BACK
     catX = 50;
     catY = 50;
 
     updateCat();
 
-    // Cat briefly becomes transparent
+    // CAT FLASHES
     cat.style.opacity = "0.3";
 
-    setTimeout(function() {
-
+    setTimeout(function () {
         cat.style.opacity = "1";
-
     }, 300);
 
 
@@ -374,17 +371,13 @@ function loseLife() {
         endGame(false);
 
         return;
-
     }
 
 
-    // Prevent instant repeated collision
-    setTimeout(function() {
-
+    // COLLISION COOLDOWN
+    setTimeout(function () {
         hitCooldown = false;
-
     }, 1200);
-
 }
 
 
@@ -396,17 +389,11 @@ function endGame(won) {
 
     gameRunning = false;
 
-    // Stop phone movement
-    phoneDirection.up = false;
-    phoneDirection.down = false;
-    phoneDirection.left = false;
-    phoneDirection.right = false;
-
+    stopAllMovement();
 
     if (won) {
 
         message.innerHTML =
-
             "🎉 YOU WIN! 🎉" +
             "<br><br>" +
             "🐱 You collected all 10 apples! 🍎";
@@ -414,16 +401,25 @@ function endGame(won) {
     } else {
 
         message.innerHTML =
-
             "💀 GAME OVER 💀" +
             "<br><br>" +
-            "🐍 The snake got you!";
-
+            "🐍 The snakes got you!";
     }
 
-
     message.style.display = "block";
+}
 
+
+// ========================================
+// STOP ALL MOVEMENT
+// ========================================
+
+function stopAllMovement() {
+
+    movement.up = false;
+    movement.down = false;
+    movement.left = false;
+    movement.right = false;
 }
 
 
@@ -431,12 +427,11 @@ function endGame(won) {
 // KEYBOARD CONTROLS
 // ========================================
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener("keydown", function (event) {
 
     if (!gameRunning) return;
 
     const key = event.key.toLowerCase();
-
 
     if (
         key === "arrowup" ||
@@ -448,9 +443,7 @@ document.addEventListener("keydown", function(event) {
         key === "s" ||
         key === "d"
     ) {
-
         event.preventDefault();
-
     }
 
 
@@ -458,9 +451,7 @@ document.addEventListener("keydown", function(event) {
         key === "arrowup" ||
         key === "w"
     ) {
-
-        phoneDirection.up = true;
-
+        movement.up = true;
     }
 
 
@@ -468,9 +459,7 @@ document.addEventListener("keydown", function(event) {
         key === "arrowdown" ||
         key === "s"
     ) {
-
-        phoneDirection.down = true;
-
+        movement.down = true;
     }
 
 
@@ -478,9 +467,7 @@ document.addEventListener("keydown", function(event) {
         key === "arrowleft" ||
         key === "a"
     ) {
-
-        phoneDirection.left = true;
-
+        movement.left = true;
     }
 
 
@@ -488,9 +475,7 @@ document.addEventListener("keydown", function(event) {
         key === "arrowright" ||
         key === "d"
     ) {
-
-        phoneDirection.right = true;
-
+        movement.right = true;
     }
 
 });
@@ -500,55 +485,43 @@ document.addEventListener("keydown", function(event) {
 // KEYBOARD RELEASE
 // ========================================
 
-document.addEventListener("keyup", function(event) {
+document.addEventListener("keyup", function (event) {
 
     const key = event.key.toLowerCase();
-
 
     if (
         key === "arrowup" ||
         key === "w"
     ) {
-
-        phoneDirection.up = false;
-
+        movement.up = false;
     }
-
 
     if (
         key === "arrowdown" ||
         key === "s"
     ) {
-
-        phoneDirection.down = false;
-
+        movement.down = false;
     }
-
 
     if (
         key === "arrowleft" ||
         key === "a"
     ) {
-
-        phoneDirection.left = false;
-
+        movement.left = false;
     }
-
 
     if (
         key === "arrowright" ||
         key === "d"
     ) {
-
-        phoneDirection.right = false;
-
+        movement.right = false;
     }
 
 });
 
 
 // ========================================
-// PHONE BUTTON FUNCTION
+// PHONE BUTTONS
 // ========================================
 
 function setupPhoneButton(button, direction) {
@@ -556,29 +529,25 @@ function setupPhoneButton(button, direction) {
     if (!button) return;
 
 
-    // START MOVING
     function startMove(event) {
 
         event.preventDefault();
 
         if (!gameRunning) return;
 
-        phoneDirection[direction] = true;
-
+        movement[direction] = true;
     }
 
 
-    // STOP MOVING
     function stopMove(event) {
 
         event.preventDefault();
 
-        phoneDirection[direction] = false;
-
+        movement[direction] = false;
     }
 
 
-    // Touch
+    // TOUCH
     button.addEventListener(
         "touchstart",
         startMove,
@@ -598,7 +567,7 @@ function setupPhoneButton(button, direction) {
     );
 
 
-    // Mouse
+    // MOUSE
     button.addEventListener(
         "mousedown",
         startMove
@@ -613,12 +582,11 @@ function setupPhoneButton(button, direction) {
         "mouseleave",
         stopMove
     );
-
 }
 
 
 // ========================================
-// ACTIVATE PHONE BUTTONS
+// CONNECT PHONE BUTTONS
 // ========================================
 
 setupPhoneButton(
@@ -651,38 +619,29 @@ function moveCat() {
     if (!gameRunning) return;
 
 
-    if (phoneDirection.up) {
-
+    if (movement.up) {
         catY -= speed;
-
     }
 
 
-    if (phoneDirection.down) {
-
+    if (movement.down) {
         catY += speed;
-
     }
 
 
-    if (phoneDirection.left) {
-
+    if (movement.left) {
         catX -= speed;
-
     }
 
 
-    if (phoneDirection.right) {
-
+    if (movement.right) {
         catX += speed;
-
     }
 
 
     keepCatInside();
 
     updateCat();
-
 }
 
 
@@ -692,7 +651,7 @@ function moveCat() {
 
 restartButton.addEventListener(
     "click",
-    function() {
+    function () {
 
         score = 0;
 
@@ -703,24 +662,17 @@ restartButton.addEventListener(
         livesDisplay.textContent = lives;
 
         catX = 50;
-
         catY = 50;
 
         gameRunning = true;
 
         hitCooldown = false;
 
-
-        phoneDirection.up = false;
-        phoneDirection.down = false;
-        phoneDirection.left = false;
-        phoneDirection.right = false;
-
+        stopAllMovement();
 
         message.style.display = "none";
 
         cat.style.opacity = "1";
-
 
         updateCat();
 
@@ -751,7 +703,6 @@ function gameLoop() {
     }
 
     requestAnimationFrame(gameLoop);
-
 }
 
 
