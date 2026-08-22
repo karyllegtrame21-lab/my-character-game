@@ -82,7 +82,6 @@ const roundNotes = {
 };
 
 function getRoundNote() {
-
     if (roundNotes[round]) {
         return roundNotes[round];
     }
@@ -124,7 +123,6 @@ function setupRound() {
 // ========================================
 
 function updateCat() {
-
     cat.style.left = catX + "px";
     cat.style.top = catY + "px";
 }
@@ -188,17 +186,15 @@ function createApple() {
 function createApples() {
 
     apples.forEach(apple => {
-
         if (apple) {
             apple.remove();
         }
-
     });
 
     apples = [];
 
     // ROUND 10+
-    // Apples appear one at a time
+    // Apples appear gradually
 
     if (round >= 10) {
 
@@ -213,16 +209,12 @@ function createApples() {
             }, i * 700);
         }
 
-    }
+    } else {
 
-    // NORMAL ROUNDS
-
-    else {
-
+        // Normal rounds
         for (let i = 0; i < appleGoal; i++) {
             createApple();
         }
-
     }
 }
 
@@ -232,20 +224,15 @@ function createApples() {
 
 function createSnake() {
 
-    const snakeElement =
-        document.createElement("div");
+    const snakeElement = document.createElement("div");
 
     snakeElement.className = "snake";
     snakeElement.textContent = "🐍";
 
-    const position =
-        randomPosition(35, 25);
+    const position = randomPosition(35, 25);
 
-    snakeElement.style.left =
-        position.x + "px";
-
-    snakeElement.style.top =
-        position.y + "px";
+    snakeElement.style.left = position.x + "px";
+    snakeElement.style.top = position.y + "px";
 
     game.appendChild(snakeElement);
 
@@ -282,17 +269,13 @@ function createSnakes(count) {
                 }
 
             }, i * 1200);
-
         }
 
-    }
-
-    else {
+    } else {
 
         for (let i = 0; i < count; i++) {
             createSnake();
         }
-
     }
 }
 
@@ -318,15 +301,13 @@ function checkAppleCollision() {
 
     if (!gameRunning) return;
 
-    const catRect =
-        cat.getBoundingClientRect();
+    const catRect = cat.getBoundingClientRect();
 
     apples.forEach((apple, index) => {
 
         if (!apple) return;
 
-        const appleRect =
-            apple.getBoundingClientRect();
+        const appleRect = apple.getBoundingClientRect();
 
         if (isColliding(catRect, appleRect)) {
 
@@ -336,8 +317,7 @@ function checkAppleCollision() {
 
             score++;
 
-            scoreDisplay.textContent =
-                score;
+            scoreDisplay.textContent = score;
 
             if (score >= appleGoal) {
                 completeRound();
@@ -353,7 +333,7 @@ function checkAppleCollision() {
 function getSnakeSpeed() {
 
     // Slow at Round 1
-    // Gradually increases
+    // Gradually becomes faster
 
     return Math.min(
         0.7 + ((round - 1) * 0.10),
@@ -369,60 +349,47 @@ function moveSnakes() {
 
     if (!gameRunning) return;
 
-    const snakeSpeed =
-        getSnakeSpeed();
+    const snakeSpeed = getSnakeSpeed();
 
     snakes.forEach(snake => {
 
-        const catCenterX =
-            catX + 30;
+        const catCenterX = catX + 30;
+        const catCenterY = catY + 30;
 
-        const catCenterY =
-            catY + 30;
+        const snakeCenterX = snake.x + 17;
+        const snakeCenterY = snake.y + 12;
 
-        const snakeCenterX =
-            snake.x + 17;
+        const dx = catCenterX - snakeCenterX;
+        const dy = catCenterY - snakeCenterY;
 
-        const snakeCenterY =
-            snake.y + 12;
-
-        const dx =
-            catCenterX - snakeCenterX;
-
-        const dy =
-            catCenterY - snakeCenterY;
-
-        const distance =
-            Math.sqrt(dx * dx + dy * dy);
+        const distance = Math.sqrt(
+            dx * dx + dy * dy
+        );
 
         if (distance > 0) {
 
             snake.x +=
-                (dx / distance) *
-                snakeSpeed;
+                (dx / distance) * snakeSpeed;
 
             snake.y +=
-                (dy / distance) *
-                snakeSpeed;
+                (dy / distance) * snakeSpeed;
         }
 
-        snake.x =
-            Math.max(
-                0,
-                Math.min(
-                    snake.x,
-                    game.clientWidth - 35
-                )
-            );
+        snake.x = Math.max(
+            0,
+            Math.min(
+                snake.x,
+                game.clientWidth - 35
+            )
+        );
 
-        snake.y =
-            Math.max(
-                0,
-                Math.min(
-                    snake.y,
-                    game.clientHeight - 25
-                )
-            );
+        snake.y = Math.max(
+            0,
+            Math.min(
+                snake.y,
+                game.clientHeight - 25
+            )
+        );
 
         snake.element.style.left =
             snake.x + "px";
@@ -442,21 +409,14 @@ function checkSnakeCollision() {
         return;
     }
 
-    const catRect =
-        cat.getBoundingClientRect();
+    const catRect = cat.getBoundingClientRect();
 
     for (const snake of snakes) {
 
         const snakeRect =
-            snake.element
-                .getBoundingClientRect();
+            snake.element.getBoundingClientRect();
 
-        if (
-            isColliding(
-                catRect,
-                snakeRect
-            )
-        ) {
+        if (isColliding(catRect, snakeRect)) {
 
             loseLife();
 
@@ -477,10 +437,9 @@ function loseLife() {
 
     lives--;
 
-    livesDisplay.textContent =
-        lives;
+    livesDisplay.textContent = lives;
 
-    // Move cat back
+    // Move cat back to starting position
 
     catX = 50;
     catY = 50;
@@ -495,7 +454,7 @@ function loseLife() {
         cat.style.opacity = "1";
     }, 300);
 
-    // GAME OVER
+    // Game Over
 
     if (lives <= 0) {
 
@@ -507,9 +466,7 @@ function loseLife() {
     // Temporary protection
 
     setTimeout(() => {
-
         hitCooldown = false;
-
     }, 1200);
 }
 
@@ -535,17 +492,14 @@ function startCatFireworks() {
 
     for (let i = 0; i < 45; i++) {
 
-        const item =
-            document.createElement("div");
+        const item = document.createElement("div");
 
-        item.className =
-            "catFirework";
+        item.className = "catFirework";
 
         item.textContent =
             effects[
                 Math.floor(
-                    Math.random() *
-                    effects.length
+                    Math.random() * effects.length
                 )
                 ];
 
@@ -557,14 +511,12 @@ function startCatFireworks() {
 
         item.style.setProperty(
             "--x",
-            (Math.random() * 250 - 125) +
-            "px"
+            (Math.random() * 250 - 125) + "px"
         );
 
         item.style.setProperty(
             "--y",
-            (Math.random() * 250 - 125) +
-            "px"
+            (Math.random() * 250 - 125) + "px"
         );
 
         fireworks.appendChild(item);
@@ -582,15 +534,12 @@ function completeRound() {
     stopAllMovement();
 
     roundTitle.textContent =
-        "🎉 ROUND " +
-        round +
-        " COMPLETE! 🎉";
+        "🎉 ROUND " + round + " COMPLETE! 🎉";
 
     roundNote.textContent =
         getRoundNote();
 
-    roundComplete.style.display =
-        "flex";
+    roundComplete.style.display = "flex";
 
     startCatFireworks();
 }
@@ -607,26 +556,22 @@ nextRoundButton.addEventListener(
 
         score = 0;
 
-        scoreDisplay.textContent =
-            score;
+        scoreDisplay.textContent = score;
 
-        // RESET LIVES EVERY ROUND
+        // RESET LIVES TO 5 EVERY ROUND
 
         lives = STARTING_LIVES;
 
-        livesDisplay.textContent =
-            lives;
+        livesDisplay.textContent = lives;
 
         catX = 50;
         catY = 50;
 
         updateCat();
 
-        roundComplete.style.display =
-            "none";
+        roundComplete.style.display = "none";
 
-        fireworks.innerHTML =
-            "";
+        fireworks.innerHTML = "";
 
         gameRunning = true;
 
@@ -642,8 +587,7 @@ startButton.addEventListener(
     "click",
     function () {
 
-        startScreen.style.display =
-            "none";
+        startScreen.style.display = "none";
 
         round = 1;
 
@@ -651,14 +595,11 @@ startButton.addEventListener(
 
         lives = STARTING_LIVES;
 
-        scoreDisplay.textContent =
-            score;
+        scoreDisplay.textContent = score;
 
-        livesDisplay.textContent =
-            lives;
+        livesDisplay.textContent = lives;
 
-        roundDisplay.textContent =
-            round;
+        roundDisplay.textContent = round;
 
         catX = 50;
         catY = 50;
@@ -686,8 +627,7 @@ function gameOver() {
         round +
         "! 🏆";
 
-    gameOverScreen.style.display =
-        "flex";
+    gameOverScreen.style.display = "flex";
 }
 
 // ========================================
@@ -704,17 +644,13 @@ function restartGame() {
 
     appleGoal = 10;
 
-    scoreDisplay.textContent =
-        score;
+    scoreDisplay.textContent = score;
 
-    livesDisplay.textContent =
-        lives;
+    livesDisplay.textContent = lives;
 
-    appleGoalDisplay.textContent =
-        appleGoal;
+    appleGoalDisplay.textContent = appleGoal;
 
-    roundDisplay.textContent =
-        round;
+    roundDisplay.textContent = round;
 
     catX = 50;
     catY = 50;
@@ -725,27 +661,21 @@ function restartGame() {
 
     hitCooldown = false;
 
-    gameOverScreen.style.display =
-        "none";
+    gameOverScreen.style.display = "none";
 
-    roundComplete.style.display =
-        "none";
+    roundComplete.style.display = "none";
 
-    fireworks.innerHTML =
-        "";
+    fireworks.innerHTML = "";
 
     apples.forEach(apple => {
 
         if (apple) {
             apple.remove();
         }
-
     });
 
     snakes.forEach(snake => {
-
         snake.element.remove();
-
     });
 
     apples = [];
@@ -754,8 +684,7 @@ function restartGame() {
 
     gameRunning = false;
 
-    startScreen.style.display =
-        "flex";
+    startScreen.style.display = "flex";
 }
 
 // ========================================
@@ -773,7 +702,7 @@ restartGameButton.addEventListener(
 );
 
 // ========================================
-// KEYBOARD CONTROLS
+// DESKTOP KEYBOARD CONTROLS
 // ========================================
 
 document.addEventListener(
@@ -782,8 +711,9 @@ document.addEventListener(
 
         if (!gameRunning) return;
 
-        const key =
-            event.key.toLowerCase();
+        const key = event.key.toLowerCase();
+
+        // Prevent browser scrolling
 
         if (
             key === "arrowup" ||
@@ -799,6 +729,8 @@ document.addEventListener(
             event.preventDefault();
         }
 
+        // UP
+
         if (
             key === "arrowup" ||
             key === "w"
@@ -806,6 +738,8 @@ document.addEventListener(
 
             movement.up = true;
         }
+
+        // DOWN
 
         if (
             key === "arrowdown" ||
@@ -815,6 +749,8 @@ document.addEventListener(
             movement.down = true;
         }
 
+        // LEFT
+
         if (
             key === "arrowleft" ||
             key === "a"
@@ -822,6 +758,8 @@ document.addEventListener(
 
             movement.left = true;
         }
+
+        // RIGHT
 
         if (
             key === "arrowright" ||
@@ -834,15 +772,16 @@ document.addEventListener(
 );
 
 // ========================================
-// KEYBOARD RELEASE
+// DESKTOP KEY RELEASE
 // ========================================
 
 document.addEventListener(
     "keyup",
     function (event) {
 
-        const key =
-            event.key.toLowerCase();
+        const key = event.key.toLowerCase();
+
+        // UP
 
         if (
             key === "arrowup" ||
@@ -852,6 +791,8 @@ document.addEventListener(
             movement.up = false;
         }
 
+        // DOWN
+
         if (
             key === "arrowdown" ||
             key === "s"
@@ -860,6 +801,8 @@ document.addEventListener(
             movement.down = false;
         }
 
+        // LEFT
+
         if (
             key === "arrowleft" ||
             key === "a"
@@ -867,6 +810,8 @@ document.addEventListener(
 
             movement.left = false;
         }
+
+        // RIGHT
 
         if (
             key === "arrowright" ||
@@ -901,9 +846,6 @@ function setupPhoneButton(button, direction) {
 
         movement[direction] = false;
     }
-
-    // Pointer events work on
-    // both phones and computers
 
     button.addEventListener(
         "pointerdown",
