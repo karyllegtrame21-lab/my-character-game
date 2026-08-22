@@ -1,111 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Apple Collector</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ginger Cat Apple Game</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            overflow: hidden;
             font-family: Arial, sans-serif;
+            background: #fff4e6;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin: 15px 0 5px;
+            color: #7b3f00;
+        }
+
+        #gameInfo {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px;
         }
 
         #game {
-            width: 100vw;
-            height: 100vh;
-            background: lightgreen;
             position: relative;
+            width: 90vw;
+            max-width: 900px;
+            height: 70vh;
+            max-height: 600px;
+            min-height: 400px;
+            margin: auto;
+            background: #d9f7be;
+            border: 5px solid #5b8c3a;
+            border-radius: 15px;
             overflow: hidden;
         }
 
-        /* CHARACTER */
-        #character {
-            width: 50px;
-            height: 50px;
-            background: red;
-            border-radius: 10px;
+        /* CAT */
+        #cat {
             position: absolute;
-            left: 100px;
-            top: 100px;
-        }
-
-        /* APPLE */
-        #apple {
-            width: 30px;
-            height: 30px;
-            background: red;
-            border-radius: 50%;
-            position: absolute;
-            left: 500px;
-            top: 300px;
-        }
-
-        /* SCORE */
-        #score {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 25px;
-            font-weight: bold;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            z-index: 20;
-        }
-
-        /* PHONE BUTTONS */
-        #controls {
-            position: absolute;
-            bottom: 25px;
-            right: 25px;
-            z-index: 20;
+            width: 60px;
+            height: 60px;
+            font-size: 52px;
+            line-height: 60px;
             text-align: center;
+            user-select: none;
+            z-index: 5;
         }
 
-        #controls button {
-            width: 65px;
-            height: 65px;
-            margin: 4px;
-            font-size: 28px;
-            border: none;
-            border-radius: 15px;
+        /* APPLES */
+        .apple {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            font-size: 30px;
+            line-height: 35px;
+            text-align: center;
+            user-select: none;
+        }
+
+        /* SNAKES */
+        .snake {
+            position: absolute;
+            width: 45px;
+            height: 25px;
+            font-size: 25px;
+            line-height: 25px;
+            text-align: center;
+            user-select: none;
+            z-index: 4;
+        }
+
+        #message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            padding: 25px;
             background: white;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            touch-action: none;
+            border: 4px solid #7b3f00;
+            border-radius: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            display: none;
+            z-index: 20;
         }
 
-        #controls button:active {
-            transform: scale(0.9);
-            background: lightgray;
+        #restart {
+            margin-top: 15px;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            background: #7b3f00;
+            color: white;
+            cursor: pointer;
+        }
+
+        #restart:hover {
+            background: #a05200;
+        }
+
+        #controls {
+            margin-top: 10px;
+            color: #555;
+            font-size: 15px;
         }
     </style>
 </head>
 
 <body>
 
+<h1>🐱 Ginger Cat Apple Game 🍎</h1>
+
+<div id="gameInfo">
+    <div>🍎 Apples: <span id="score">0</span>/10</div>
+    <div>❤️ Lives: <span id="lives">3</span></div>
+</div>
+
 <div id="game">
 
-    <div id="score">Score: 0</div>
+    <!-- Ginger cat -->
+    <div id="cat">🐱</div>
 
-    <div id="character"></div>
+    <!-- Game over / win message -->
+    <div id="message"></div>
 
-    <div id="apple"></div>
+</div>
 
-    <!-- PHONE CONTROLS -->
-    <div id="controls">
+<button id="restart">🔄 Restart Game</button>
 
-        <div>
-            <button id="up">⬆️</button>
-        </div>
-
-        <div>
-            <button id="left">⬅️</button>
-            <button id="down">⬇️</button>
-            <button id="right">➡️</button>
-        </div>
-
-    </div>
-
+<div id="controls">
+    Use <b>Arrow Keys</b> or <b>W A S D</b> to move the cat.
+    Collect 10 apples and avoid the snakes!
 </div>
 
 <script src="iindex.js"></script>
