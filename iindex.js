@@ -23,7 +23,7 @@ const MAX_APPLES = 10;
 // SPEED IS NOW 10
 const speed = 10;
 
-const STARTING_LIVES = 3;
+const STARTING_LIVES = 5;
 
 
 // ========================================
