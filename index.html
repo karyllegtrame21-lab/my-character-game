@@ -1,25 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    >
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0,
+                   maximum-scale=1.0, user-scalable=no">
 
     <title>Meowple Rush</title>
-
 
     <style>
 
         * {
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
-
 
         html,
         body {
@@ -29,554 +22,339 @@
             min-height: 100%;
         }
 
-
         body {
-
-            font-family:
-                    Arial,
-                    Helvetica,
-                    sans-serif;
-
+            font-family: Arial, Helvetica, sans-serif;
             background:
-                    linear-gradient(
-                            135deg,
-                            #fff4df,
-                            #ffe9e9
-                    );
-
-            color: #5b351d;
-
+                    radial-gradient(circle at top left,
+                    #fff1d8 0%,
+                    #ffe9e3 45%,
+                    #f9dfe8 100%);
+            color: #56351f;
             text-align: center;
-
             overflow-x: hidden;
-
-            overscroll-behavior: none;
-
         }
 
-
-        /* =====================================================
-           MAIN PAGE
-        ===================================================== */
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
 
         #page {
-
             width: 100%;
-
             max-width: 1100px;
-
-            margin: auto;
-
-            padding:
-                    12px
-                    14px
-                    18px;
-
+            margin: 0 auto;
+            padding: 10px 14px 18px;
         }
 
-
-        /* =====================================================
+        /* =========================
            TITLE
-        ===================================================== */
+        ========================= */
 
-        #gameTitle {
-
-            margin:
-                    3px
-                    0
-                    8px;
-
-            font-size:
-                    clamp(
-                            30px,
-                            6vw,
-                            62px
-                    );
-
+        #title {
+            margin: 4px 0 10px;
+            font-size: clamp(30px, 5vw, 55px);
             font-weight: 900;
-
-            color: #603719;
+            color: #70401f;
 
             text-shadow:
-                    2px 3px 0 #fff,
-                    4px 5px 0 #d99b58;
-
-            letter-spacing: 1px;
-
+                    2px 2px 0 #fff,
+                    4px 4px 0 #e5c39b;
         }
 
-
-        .titleCat {
-            display: inline-block;
-        }
-
-
-        /* =====================================================
-           SCORE CARDS
-        ===================================================== */
+        /* =========================
+           GAME INFORMATION
+        ========================= */
 
         #gameInfo {
-
             display: grid;
-
             grid-template-columns:
-                repeat(
-                    3,
-                    1fr
-                );
+                repeat(3, minmax(0, 1fr));
 
-            gap: 10px;
-
+            gap: 12px;
             width: 100%;
-
-            margin:
-                    8px
-                    auto
-                    12px;
-
+            margin: 0 auto 12px;
         }
-
 
         .statCard {
-
             background:
-                    rgba(
-                            255,
-                            250,
-                            238,
-                            0.95
+                    linear-gradient(
+                            145deg,
+                            #fffaf0,
+                            #fff0d2
                     );
 
-            border:
-                    3px solid #f0d39d;
+            border: 3px solid #efd5a7;
+            border-radius: 22px;
 
-            border-radius: 18px;
+            min-height: 78px;
 
-            padding:
-                    7px
-                    5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
 
-            min-height: 65px;
+            padding: 8px;
 
             box-shadow:
-                    0 5px 0 #d8b477,
-                    0 8px 14px
-                    rgba(
-                            120,
-                            78,
-                            35,
-                            0.12
-                    );
+                    0 5px 0 #d6ae78,
+                    0 8px 16px rgba(100, 60, 30, 0.12);
 
+            font-size: clamp(15px, 2vw, 22px);
+            font-weight: 800;
         }
 
-
-        .statLabel {
-
-            display: block;
-
-            font-size:
-                    clamp(
-                            14px,
-                            2.5vw,
-                            20px
-                    );
-
-            font-weight: bold;
-
+        .statIcon {
+            font-size: clamp(27px, 4vw, 40px);
         }
-
 
         .statValue {
-
-            display: block;
-
-            margin-top: 2px;
-
-            font-size:
-                    clamp(
-                            21px,
-                            4vw,
-                            32px
-                    );
-
+            font-size: clamp(20px, 3vw, 30px);
             font-weight: 900;
-
         }
-
 
         #score {
-            color: #619c38;
+            color: #6da329;
         }
-
 
         #lives {
-            color: #e95d55;
+            color: #e65a55;
         }
-
 
         #round {
-            color: #e79a22;
+            color: #e9a321;
         }
 
-
-        /* =====================================================
+        /* =========================
            GAME FIELD
-        ===================================================== */
+        ========================= */
 
         #game {
-
             position: relative;
 
             width: 100%;
+            height: min(58vh, 610px);
 
-            height: min(
-                    61vh,
-                    650px
-            );
+            min-height: 390px;
 
-            min-height: 410px;
+            margin: 0 auto;
 
-            margin:
-                    0
-                    auto;
+            background:
+                    linear-gradient(
+                            145deg,
+                            #c9ed72,
+                            #a8db58 45%,
+                            #8fcb4d
+                    );
+
+            border: 7px solid #7cab49;
+            border-radius: 32px;
 
             overflow: hidden;
 
-            border:
-                    7px solid #6d9d39;
-
-            border-radius: 32px;
-
-            background:
-
-                    linear-gradient(
-                            135deg,
-                            #b7df5d,
-                            #d7ed76
-                    );
-
             box-shadow:
-
-                    inset
-                    0 0 0 3px
-                    #9bc957,
-
-                    0 8px 0 #d2b47a,
-
-                    0 12px 25px
-                    rgba(
-                            72,
-                            55,
-                            20,
-                            0.15
-                    );
+                    inset 0 0 0 4px #dff5a2,
+                    inset 0 0 35px rgba(64, 105, 25, 0.25),
+                    0 8px 0 #638f39,
+                    0 15px 25px rgba(80, 50, 20, 0.18);
 
             touch-action: none;
-
         }
 
-
-        /* Decorative garden */
+        /* Garden decorations */
 
         #game::before {
-
-            content: "";
-
+            content: "🌼   🌿    🌼        🌱      🌼     🌿";
             position: absolute;
-
-            inset: 0;
-
+            top: 12px;
+            left: 0;
+            width: 100%;
+            font-size: 22px;
+            opacity: 0.65;
             pointer-events: none;
-
-            background:
-
-                    radial-gradient(
-                            circle at 15% 20%,
-                            rgba(
-                                    255,
-                                    255,
-                                    255,
-                                    0.5
-                            )
-                            0 3px,
-                            transparent 4px
-                    ),
-
-                    radial-gradient(
-                            circle at 75% 30%,
-                            rgba(
-                                    255,
-                                    255,
-                                    255,
-                                    0.4
-                            )
-                            0 3px,
-                            transparent 4px
-                    );
-
-            background-size:
-                    80px 80px,
-                    100px 100px;
-
-            opacity: 0.6;
-
         }
 
+        #game::after {
+            content: "🌿      🌼       🌱       🌼      🌿";
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+            font-size: 21px;
+            opacity: 0.65;
+            pointer-events: none;
+        }
 
-        /* =====================================================
+        /* =========================
            CAT
-        ===================================================== */
+        ========================= */
 
         #cat {
-
             position: absolute;
 
             width: 58px;
-
             height: 58px;
 
-            font-size: 49px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-            line-height: 58px;
-
-            text-align: center;
+            font-size: 46px;
+            line-height: 1;
 
             user-select: none;
 
             z-index: 20;
 
             filter:
-                    drop-shadow(
-                            0 3px 2px
-                            rgba(
-                                    0,
-                                    0,
-                                    0,
-                                    0.18
-                            )
-                    );
+                    drop-shadow(2px 3px 2px rgba(0,0,0,0.25));
 
+            transition:
+                    transform 0.08s linear;
         }
 
+        #cat.moving {
+            animation: catBounce 0.18s infinite alternate;
+        }
 
-        /* =====================================================
+        @keyframes catBounce {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-3px);
+            }
+        }
+
+        /* =========================
            APPLES
-        ===================================================== */
+        ========================= */
 
         .apple {
-
-            position: absolute;
-
-            width: 38px;
-
-            height: 38px;
-
-            font-size: 32px;
-
-            line-height: 38px;
-
-            text-align: center;
-
-            user-select: none;
-
-            z-index: 8;
-
-            animation:
-                    applePop
-                    0.25s
-                    ease-out;
-
-            filter:
-                    drop-shadow(
-                            0 3px 2px
-                            rgba(
-                                    80,
-                                    40,
-                                    10,
-                                    0.2
-                            )
-                    );
-
-        }
-
-
-        @keyframes applePop {
-
-            0% {
-                transform: scale(0);
-            }
-
-            80% {
-                transform: scale(1.15);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-
-        }
-
-
-        /* =====================================================
-           SNAKES
-        ===================================================== */
-
-        .snake {
-
             position: absolute;
 
             width: 40px;
+            height: 40px;
 
-            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-            font-size: 28px;
+            font-size: 34px;
 
-            line-height: 30px;
-
-            text-align: center;
+            z-index: 8;
 
             user-select: none;
 
-            z-index: 10;
+            animation:
+                    appleFloat 1s ease-in-out infinite alternate;
 
             filter:
-                    drop-shadow(
-                            0 3px 2px
-                            rgba(
-                                    40,
-                                    60,
-                                    10,
-                                    0.25
-                            )
-                    );
-
-            transition:
-                    transform
-                    0.05s
-                    linear;
-
+                    drop-shadow(2px 3px 2px rgba(0,0,0,0.22));
         }
 
+        @keyframes appleFloat {
+            from {
+                transform: translateY(0);
+            }
 
-        /* =====================================================
-           START / ROUND / GAME OVER OVERLAYS
-        ===================================================== */
+            to {
+                transform: translateY(-4px);
+            }
+        }
+
+        /* =========================
+           SNAKES
+        ========================= */
+
+        .snake {
+            position: absolute;
+
+            width: 45px;
+            height: 35px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 30px;
+
+            z-index: 10;
+
+            user-select: none;
+
+            filter:
+                    drop-shadow(2px 3px 2px rgba(0,0,0,0.25));
+
+            transition:
+                    left 0.12s linear,
+                    top 0.12s linear;
+        }
+
+        /* =========================
+           START / GAME OVER / ROUND
+        ========================= */
 
         .overlay {
-
             position: absolute;
 
             inset: 0;
 
-            display: flex;
+            z-index: 100;
 
+            display: flex;
             flex-direction: column;
 
             justify-content: center;
-
             align-items: center;
 
-            padding:
-                    25px;
-
-            z-index: 100;
+            padding: 20px;
 
             background:
-                    rgba(
-                            255,
-                            248,
-                            237,
-                            0.94
-                    );
+                    rgba(255, 247, 236, 0.93);
 
-            backdrop-filter:
-                    blur(3px);
-
+            backdrop-filter: blur(4px);
         }
 
-
-        .overlayCard {
-
-            width:
-                    min(
-                            90%,
-                            560px
-                    );
+        .overlayBox {
+            width: min(90%, 560px);
 
             background:
-                    #fff6e5;
+                    linear-gradient(
+                            145deg,
+                            #fffaf0,
+                            #ffedcf
+                    );
 
-            border:
-                    3px solid #f0cf91;
+            border: 4px dashed #e5bd7c;
 
-            border-radius: 30px;
+            border-radius: 28px;
 
-            padding:
-                    25px
-                    22px;
+            padding: 25px 22px;
 
             box-shadow:
-
-                    0 7px 0 #d8a75e,
-
-                    0 15px 25px
-                    rgba(
-                            100,
-                            60,
-                            20,
-                            0.16
-                    );
-
+                    0 8px 0 #d2a567,
+                    0 15px 25px rgba(80, 45, 20, 0.18);
         }
-
 
         .overlay h2 {
+            margin: 0 0 15px;
 
-            margin:
-                    0
-                    0
-                    18px;
+            font-size: clamp(25px, 5vw, 40px);
 
-            color: #62391e;
-
-            font-size:
-                    clamp(
-                            25px,
-                            5vw,
-                            40px
-                    );
-
+            color: #70401f;
         }
-
 
         .overlay p {
+            margin: 8px 0;
 
-            margin:
-                    10px 0;
+            font-size: clamp(15px, 2.5vw, 20px);
 
-            font-size:
-                    clamp(
-                            16px,
-                            3vw,
-                            21px
-                    );
-
-            line-height: 1.45;
-
+            line-height: 1.4;
         }
 
-
-        /* =====================================================
-           BUTTONS
-        ===================================================== */
-
-        button {
-
-            font-family: inherit;
-
-        }
-
+        /* =========================
+           GAME BUTTONS
+        ========================= */
 
         .gameButton,
         #restart,
@@ -584,783 +362,483 @@
 
             border: none;
 
-            color: white;
-
             background:
                     linear-gradient(
-                            #a86d38,
-                            #865020
+                            145deg,
+                            #ad7541,
+                            #885528
                     );
 
-            border-radius: 18px;
+            color: white;
 
             font-weight: 900;
+
+            border-radius: 22px;
 
             cursor: pointer;
 
             box-shadow:
-
-                    0 5px 0 #633816,
-
-                    0 9px 18px
-                    rgba(
-                            90,
-                            45,
-                            15,
-                            0.2
-                    );
+                    0 5px 0 #6c401e,
+                    0 9px 18px rgba(85, 45, 20, 0.22);
 
             transition:
-                    transform
-                    0.1s;
-
+                    transform 0.1s,
+                    box-shadow 0.1s;
         }
-
 
         .gameButton {
-
             margin-top: 18px;
 
-            padding:
-                    14px
-                    32px;
+            padding: 14px 30px;
 
-            font-size:
-                    20px;
-
+            font-size: 20px;
         }
 
+        #restart,
+        #pauseButton {
+            min-width: 220px;
+
+            padding: 13px 25px;
+
+            font-size: 18px;
+        }
+
+        .gameButton:hover,
+        #restart:hover,
+        #pauseButton:hover {
+            transform: translateY(-2px);
+        }
 
         .gameButton:active,
         #restart:active,
         #pauseButton:active {
-
-            transform:
-                    translateY(4px);
+            transform: translateY(4px);
 
             box-shadow:
-                    0 1px 0 #633816;
-
+                    0 1px 0 #6c401e;
         }
 
+        /* =========================
+           ACTION BUTTONS
+        ========================= */
 
-        /* =====================================================
-           CONTROL BAR
-        ===================================================== */
-
-        #actionButtons {
-
+        #actions {
             display: flex;
-
             justify-content: center;
-
-            gap: 18px;
-
-            margin:
-                    15px
-                    auto
-                    12px;
-
-        }
-
-
-        #restart,
-        #pauseButton {
-
-            min-width: 220px;
-
-            padding:
-                    13px
-                    20px;
-
-            font-size:
-                    18px;
-
-        }
-
-
-        /* =====================================================
-           MOBILE CONTROLS
-        ===================================================== */
-
-        #mobileControls {
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-
-            justify-content: center;
-
-            width:
-                    min(
-                            100%,
-                            390px
-                    );
-
-            margin:
-                    8px
-                    auto
-                    10px;
-
-            padding:
-                    8px
-                    12px;
-
-            background:
-                    rgba(
-                            255,
-                            239,
-                            202,
-                            0.85
-                    );
-
-            border:
-                    3px solid #edce91;
-
-            border-radius: 28px;
-
-            box-shadow:
-                    0 5px 0 #d6b77b;
-
-            user-select: none;
-
-        }
-
-
-        .control-row {
-
-            display: flex;
-
-            justify-content: center;
-
             align-items: center;
 
             gap: 22px;
 
+            margin: 14px auto 16px;
+
+            flex-wrap: wrap;
         }
 
+        /* =========================
+           MOBILE CONTROLS
+        ========================= */
 
-        #mobileControls button {
+        #mobileControls {
+            width: 300px;
+            max-width: 88vw;
 
-            width: 82px;
+            margin: 8px auto 15px;
 
-            height: 68px;
-
-            margin: 5px;
-
-            border:
-                    3px solid #e9d7ae;
-
-            border-radius: 20px;
+            padding: 16px;
 
             background:
                     linear-gradient(
-                            #fffdf7,
-                            #fff7e8
+                            145deg,
+                            #fff1d8,
+                            #ffe9c5
                     );
 
-            color: #579b32;
+            border: 4px solid #f0d49d;
 
-            font-size: 38px;
-
-            font-weight: 900;
+            border-radius: 30px;
 
             box-shadow:
+                    0 7px 0 #d7b679,
+                    0 10px 20px rgba(80, 50, 25, 0.12);
 
-                    0 5px 0 #b7a36d,
+            user-select: none;
 
-                    0 7px 12px
-                    rgba(
-                            80,
-                            60,
-                            20,
-                            0.13
+            touch-action: none;
+        }
+
+        .control-row {
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            gap: 18px;
+        }
+
+        .moveButton {
+
+            width: 105px;
+            height: 105px;
+
+            margin: 7px;
+
+            border: 4px solid #b7c980;
+
+            border-radius: 25px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            #fffef9,
+                            #f8f1e3
                     );
+
+            color: #72ad32;
+
+            font-size: 55px;
+            font-weight: 900;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            box-shadow:
+                    0 7px 0 #a7bd72,
+                    0 10px 16px rgba(70, 50, 25, 0.16);
 
             cursor: pointer;
 
             touch-action: none;
 
             -webkit-user-select: none;
-
             user-select: none;
 
+            -webkit-tap-highlight-color: transparent;
         }
 
-
-        #mobileControls button:active {
-
-            transform:
-                    translateY(4px)
-                    scale(0.96);
+        .moveButton:active,
+        .moveButton.active {
+            transform: translateY(5px);
 
             box-shadow:
-                    0 1px 0 #b7a36d;
+                    0 2px 0 #a7bd72;
 
+            background: #f3eedf;
         }
 
-
-        /* =====================================================
+        /* =========================
            DISCLAIMER
-        ===================================================== */
+        ========================= */
 
-        #disclaimer {
+        #lowerInfo {
+            width: min(94%, 800px);
 
-            width:
-                    min(
-                            94%,
-                            900px
-                    );
+            margin: 0 auto;
 
-            margin:
-                    8px
-                    auto
-                    0;
+            display: flex;
+            justify-content: center;
+        }
 
-            padding:
-                    10px
-                    16px;
+        .infoCard {
+            width: 100%;
+
+            padding: 13px 18px;
 
             background:
-                    rgba(
-                            255,
-                            246,
-                            224,
-                            0.95
+                    linear-gradient(
+                            145deg,
+                            #fff7e9,
+                            #ffead8
                     );
 
-            border:
-                    3px solid #efd39d;
+            border: 3px dashed #e5bd7c;
 
-            border-radius: 20px;
+            border-radius: 22px;
 
             box-shadow:
-                    0 4px 0 #d6b77c;
-
+                    0 5px 0 #d6ad78;
         }
 
+        .infoCard h3 {
+            margin: 0 0 5px;
 
-        #disclaimerTitle {
+            font-size: 18px;
 
-            margin:
-                    0 0 3px;
-
-            color:
-                    #699c38;
-
-            font-size:
-                    18px;
-
-            font-weight:
-                    900;
-
+            color: #a06030;
         }
 
+        .infoCard p {
+            margin: 3px 0;
 
-        #disclaimerText {
+            font-size: 14px;
 
-            margin: 0;
-
-            font-size:
-                    14px;
-
-            font-weight:
-                    600;
-
+            line-height: 1.35;
         }
 
+        .creatorNote {
+            font-weight: 800;
 
-        /* =====================================================
-           FIREWORKS
-        ===================================================== */
-
-        #fireworks {
-
-            position: absolute;
-
-            inset: 0;
-
-            pointer-events: none;
-
-            overflow: hidden;
-
-            z-index: 101;
-
+            color: #8a5a2f;
         }
 
+        /* =========================
+           PAUSE SCREEN
+        ========================= */
 
-        .catFirework {
-
-            position: absolute;
-
-            font-size: 28px;
-
-            animation:
-                    catExplosion
-                    1.5s
-                    ease-out
-                    forwards;
-
-        }
-
-
-        @keyframes catExplosion {
-
-            0% {
-
-                transform:
-                        scale(0.2);
-
-                opacity: 0;
-
-            }
-
-            25% {
-
-                transform:
-                        scale(1.4);
-
-                opacity: 1;
-
-            }
-
-            100% {
-
-                transform:
-                        scale(0.8)
-                        translate(
-                                var(--x),
-                                var(--y)
-                        );
-
-                opacity: 0;
-
-            }
-
-        }
-
-
-        /* =====================================================
-           HIDE ELEMENTS
-        ===================================================== */
-
-        #roundComplete,
-        #gameOverScreen {
-
+        #pauseScreen {
             display: none;
-
         }
 
+        #roundComplete {
+            display: none;
+        }
 
-        /* =====================================================
-           PHONE LAYOUT
-        ===================================================== */
+        #gameOverScreen {
+            display: none;
+        }
 
-        @media (
-        max-width: 700px
-        ) {
+        #startScreen {
+            display: flex;
+        }
+
+        /* =========================
+           PHONE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            body {
+                min-height: 100dvh;
+            }
 
             #page {
-
                 padding:
-                        7px
+                        6px
                         8px
                         10px;
-
             }
 
-
-            #gameTitle {
-
-                font-size:
-                        clamp(
-                                28px,
-                                8vw,
-                                43px
-                        );
-
-                margin:
-                        0
-                        0
-                        5px;
-
+            #title {
+                font-size: 30px;
+                margin: 2px 0 7px;
             }
-
 
             #gameInfo {
-
                 gap: 6px;
-
-                margin:
-                        5px
-                        auto
-                        7px;
-
+                margin-bottom: 8px;
             }
-
 
             .statCard {
-
-                min-height: 51px;
-
-                padding:
-                        4px
-                        2px;
+                min-height: 58px;
 
                 border-width: 2px;
+                border-radius: 15px;
 
-                border-radius: 14px;
+                padding: 4px;
 
                 box-shadow:
-                        0 3px 0 #d8b477;
-
-            }
-
-
-            .statLabel {
+                        0 3px 0 #d6ae78;
 
                 font-size: 12px;
-
             }
 
+            .statIcon {
+                font-size: 22px;
+            }
 
             .statValue {
-
-                font-size: 20px;
-
+                font-size: 18px;
             }
-
 
             #game {
-
-                height:
-                        min(
-                                49vh,
-                                480px
-                        );
-
-                min-height:
-                        330px;
+                height: 43vh;
+                min-height: 300px;
+                max-height: 460px;
 
                 border-width: 5px;
-
-                border-radius: 25px;
-
+                border-radius: 24px;
             }
-
 
             #cat {
+                width: 45px;
+                height: 45px;
 
-                width: 48px;
-
-                height: 48px;
-
-                font-size: 41px;
-
-                line-height: 48px;
-
+                font-size: 37px;
             }
-
 
             .apple {
-
                 width: 32px;
-
                 height: 32px;
-
                 font-size: 28px;
-
-                line-height: 32px;
-
             }
-
 
             .snake {
-
-                width: 34px;
-
-                height: 26px;
-
-                font-size: 25px;
-
-                line-height: 26px;
-
+                width: 38px;
+                height: 30px;
+                font-size: 26px;
             }
 
-
-            #actionButtons {
-
+            #actions {
                 gap: 10px;
-
-                margin:
-                        9px
-                        auto
-                        7px;
-
+                margin: 9px auto 10px;
             }
-
 
             #restart,
             #pauseButton {
+                min-width: 145px;
 
-                min-width:
-                        0;
+                padding: 10px 13px;
 
-                width:
-                        43%;
-
-                padding:
-                        9px
-                        6px;
-
-                font-size:
-                        15px;
-
-                border-radius:
-                        14px;
-
-            }
-
-
-            #mobileControls {
-
-                width:
-                        min(
-                                94%,
-                                360px
-                        );
-
-                padding:
-                        5px
-                        8px;
-
-                margin:
-                        5px
-                        auto
-                        7px;
-
-                border-radius:
-                        22px;
-
-            }
-
-
-            .control-row {
-
-                gap: 15px;
-
-            }
-
-
-            #mobileControls button {
-
-                width: 72px;
-
-                height: 58px;
-
-                margin: 3px;
-
-                font-size: 32px;
+                font-size: 15px;
 
                 border-radius: 17px;
-
             }
-
-
-            #disclaimer {
-
-                margin-top:
-                        5px;
-
-                padding:
-                        7px
-                        10px;
-
-                border-radius:
-                        15px;
-
-            }
-
-
-            #disclaimerTitle {
-
-                font-size:
-                        15px;
-
-            }
-
-
-            #disclaimerText {
-
-                font-size:
-                        12px;
-
-            }
-
-
-            .overlay {
-
-                padding:
-                        12px;
-
-            }
-
-
-            .overlayCard {
-
-                width:
-                        90%;
-
-                padding:
-                        18px
-                        13px;
-
-                border-radius:
-                        22px;
-
-            }
-
-
-            .overlay h2 {
-
-                margin-bottom:
-                        10px;
-
-                font-size:
-                        24px;
-
-            }
-
-
-            .overlay p {
-
-                margin:
-                        6px 0;
-
-                font-size:
-                        15px;
-
-            }
-
-
-            .gameButton {
-
-                margin-top:
-                        10px;
-
-                padding:
-                        11px
-                        25px;
-
-                font-size:
-                        17px;
-
-            }
-
-        }
-
-
-        /* =====================================================
-           VERY SMALL PHONES
-        ===================================================== */
-
-        @media (
-        max-height: 700px
-        ) and (
-        max-width: 700px
-        ) {
-
-            #gameTitle {
-
-                font-size:
-                        27px;
-
-            }
-
-
-            #game {
-
-                height:
-                        42vh;
-
-                min-height:
-                        285px;
-
-            }
-
 
             #mobileControls {
+                width: 275px;
 
-                transform:
-                        scale(0.9);
+                padding: 8px;
 
-                transform-origin:
-                        top center;
+                border-radius: 25px;
 
-                margin-bottom:
-                        -12px;
-
+                margin:
+                        5px auto
+                        10px;
             }
 
-
-            #disclaimer {
-
-                transform:
-                        scale(0.92);
-
-                transform-origin:
-                        top center;
-
-                margin-bottom:
-                        -5px;
-
+            .control-row {
+                gap: 10px;
             }
 
+            .moveButton {
+                width: 82px;
+                height: 82px;
+
+                margin: 5px;
+
+                border-width: 3px;
+                border-radius: 21px;
+
+                font-size: 44px;
+
+                box-shadow:
+                        0 5px 0 #a7bd72,
+                        0 7px 12px rgba(70, 50, 25, 0.14);
+            }
+
+            .infoCard {
+                padding: 9px 12px;
+
+                border-radius: 17px;
+            }
+
+            .infoCard h3 {
+                font-size: 15px;
+            }
+
+            .infoCard p {
+                font-size: 12px;
+            }
+
+            .overlay {
+                padding: 12px;
+            }
+
+            .overlayBox {
+                padding: 18px 15px;
+
+                border-radius: 22px;
+            }
+
+            .overlay h2 {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+
+            .overlay p {
+                font-size: 15px;
+                margin: 5px;
+            }
+
+            .gameButton {
+                margin-top: 12px;
+
+                padding: 11px 22px;
+
+                font-size: 17px;
+            }
+        }
+
+        /* Smaller phones */
+
+        @media (max-height: 750px) and (max-width: 700px) {
+
+            #title {
+                font-size: 26px;
+            }
+
+            .statCard {
+                min-height: 50px;
+            }
+
+            #game {
+                height: 39vh;
+                min-height: 270px;
+            }
+
+            .moveButton {
+                width: 72px;
+                height: 72px;
+
+                font-size: 39px;
+            }
+
+            #mobileControls {
+                width: 245px;
+            }
+
+            #actions {
+                margin: 6px auto;
+            }
+
+            #restart,
+            #pauseButton {
+                min-width: 130px;
+
+                font-size: 14px;
+                padding: 8px 10px;
+            }
         }
 
     </style>
-
 </head>
-
 
 <body>
 
-
 <div id="page">
 
+    <!-- TITLE -->
 
-    <!-- =====================================================
-         TITLE
-    ====================================================== -->
-
-    <h1 id="gameTitle">
-
+    <h1 id="title">
         🐱 Meowple Rush 🍎
-
     </h1>
 
 
-    <!-- =====================================================
-         GAME INFO
-    ====================================================== -->
+    <!-- GAME INFORMATION -->
 
     <div id="gameInfo">
 
-
         <div class="statCard">
 
-            <span class="statLabel">
-                🍎 Apples
-            </span>
+            <span class="statIcon">🍎</span>
 
-            <span class="statValue">
-
-                <span id="score">0</span>
-                /
-                <span id="appleGoal">10</span>
-
+            <span>
+                Apples<br>
+                <span class="statValue">
+                    <span id="score">0</span>
+                    /
+                    <span id="appleGoal">10</span>
+                </span>
             </span>
 
         </div>
@@ -1368,14 +846,15 @@
 
         <div class="statCard">
 
-            <span class="statLabel">
-                ❤️ Lives
-            </span>
+            <span class="statIcon">❤️</span>
 
-            <span class="statValue">
-
-                <span id="lives">5</span>
-
+            <span>
+                Lives<br>
+                <span
+                        class="statValue"
+                        id="lives">
+                    5
+                </span>
             </span>
 
         </div>
@@ -1383,72 +862,61 @@
 
         <div class="statCard">
 
-            <span class="statLabel">
-                🏆 Round
-            </span>
+            <span class="statIcon">🏆</span>
 
-            <span class="statValue">
-
-                <span id="round">1</span>
-
+            <span>
+                Round<br>
+                <span
+                        class="statValue"
+                        id="round">
+                    1
+                </span>
             </span>
 
         </div>
-
 
     </div>
 
 
-    <!-- =====================================================
-         GAME
-    ====================================================== -->
+    <!-- GAME -->
 
     <div id="game">
-
-
-        <!-- CAT -->
 
         <div id="cat">
             🐱
         </div>
 
 
-        <!-- =================================================
-             START SCREEN
-        ================================================== -->
+        <!-- START -->
 
         <div
                 id="startScreen"
-                class="overlay"
-        >
+                class="overlay">
 
-            <div class="overlayCard">
+            <div class="overlayBox">
 
                 <h2>
                     🐱 Meowple Rush 🍎
                 </h2>
 
-
                 <p>
                     🍎 Collect all the apples!
                 </p>
-
 
                 <p>
                     🐍 Avoid the snakes!
                 </p>
 
-
                 <p>
                     ❤️ You have 5 lives.
                 </p>
 
-
                 <button
                         id="startButton"
-                        class="gameButton"
-                >
+                        class="gameButton">
+
                     ▶️ START GAME
+
                 </button>
 
             </div>
@@ -1456,38 +924,32 @@
         </div>
 
 
-        <!-- =================================================
-             ROUND COMPLETE
-        ================================================== -->
+        <!-- ROUND COMPLETE -->
 
         <div
                 id="roundComplete"
-                class="overlay"
-        >
+                class="overlay">
 
-            <div id="fireworks"></div>
-
-
-            <div class="overlayCard">
+            <div class="overlayBox">
 
                 <h2 id="roundTitle">
                     🎉 ROUND COMPLETE! 🎉
                 </h2>
 
-
-                <p id="roundNote"></p>
-
+                <p id="roundNote">
+                    Great job!
+                </p>
 
                 <p>
                     🐱💥 You survived the round! 💥🐱
                 </p>
 
-
                 <button
                         id="nextRoundButton"
-                        class="gameButton"
-                >
+                        class="gameButton">
+
                     ➡️ NEXT ROUND
+
                 </button>
 
             </div>
@@ -1495,76 +957,97 @@
         </div>
 
 
-        <!-- =================================================
-             GAME OVER
-        ================================================== -->
+        <!-- PAUSE -->
+
+        <div
+                id="pauseScreen"
+                class="overlay">
+
+            <div class="overlayBox">
+
+                <h2>
+                    ⏸️ GAME PAUSED
+                </h2>
+
+                <p>
+                    Take a little cat break! 🐱
+                </p>
+
+                <button
+                        id="resumeButton"
+                        class="gameButton">
+
+                    ▶️ RESUME
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- GAME OVER -->
 
         <div
                 id="gameOverScreen"
-                class="overlay"
-        >
+                class="overlay">
 
-            <div class="overlayCard">
+            <div class="overlayBox">
 
                 <h2>
                     💀 GAME OVER 💀
                 </h2>
 
-
                 <p id="gameOverNote">
                     PUYOT! 😂
                 </p>
 
-
-                <p id="finalRound"></p>
-
+                <p id="finalRound">
+                </p>
 
                 <button
                         id="restartGameButton"
-                        class="gameButton"
-                >
+                        class="gameButton">
+
                     🔄 PLAY AGAIN
+
                 </button>
 
             </div>
 
         </div>
 
-
     </div>
 
 
-    <!-- =====================================================
-         ACTION BUTTONS
-    ====================================================== -->
+    <!-- ACTION BUTTONS -->
 
-    <div id="actionButtons">
-
+    <div id="actions">
 
         <button id="restart">
             🔄 Restart Game
         </button>
 
-
         <button id="pauseButton">
             ⏸️ Pause
         </button>
 
-
     </div>
 
 
-    <!-- =====================================================
-         PHONE CONTROLS
-    ====================================================== -->
+    <!-- PHONE MOVEMENT -->
 
     <div id="mobileControls">
 
-
         <div class="control-row">
 
-            <button id="up">
+            <button
+                    class="moveButton"
+                    id="up"
+                    aria-label="Move up">
+
                 ⬆️
+
             </button>
 
         </div>
@@ -1572,13 +1055,23 @@
 
         <div class="control-row">
 
-            <button id="left">
+            <button
+                    class="moveButton"
+                    id="left"
+                    aria-label="Move left">
+
                 ⬅️
+
             </button>
 
 
-            <button id="right">
+            <button
+                    class="moveButton"
+                    id="right"
+                    aria-label="Move right">
+
                 ➡️
+
             </button>
 
         </div>
@@ -1586,44 +1079,50 @@
 
         <div class="control-row">
 
-            <button id="down">
+            <button
+                    class="moveButton"
+                    id="down"
+                    aria-label="Move down">
+
                 ⬇️
+
             </button>
 
         </div>
 
-
     </div>
 
 
-    <!-- =====================================================
-         DISCLAIMER
-    ====================================================== -->
+    <!-- DISCLAIMER -->
 
-    <div id="disclaimer">
+    <div id="lowerInfo">
 
-        <div id="disclaimerTitle">
-            🐾 Disclaimer
-        </div>
+        <div class="infoCard">
 
-        <div id="disclaimerText">
-            This game is Kaligayahan ni Alegrescritora.
+            <h3>
+                🐾 Disclaimer
+            </h3>
+
+            <p>
+                This game is made for fun and creative purposes.
+            </p>
+
+            <p class="creatorNote">
+                ✨ This game is Kaligayahan ni Alegrescritora ✨
+            </p>
+
         </div>
 
     </div>
-
 
 </div>
 
 
-<!-- =========================================================
-     IMPORTANT:
-     Your JavaScript file is named iindex.js
-========================================================== -->
+<!-- IMPORTANT:
+     Your JavaScript filename is iindex.js
+-->
 
 <script src="iindex.js"></script>
 
-
 </body>
-
 </html>
