@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Apple Collector</title>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        #game {
+            width: 100vw;
+            height: 100vh;
+            background: lightgreen;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* CHARACTER */
+        #character {
+            width: 50px;
+            height: 50px;
+            background: red;
+            border-radius: 10px;
+            position: absolute;
+            left: 100px;
+            top: 100px;
+        }
+
+        /* APPLE */
+        #apple {
+            width: 30px;
+            height: 30px;
+            background: red;
+            border-radius: 50%;
+            position: absolute;
+            left: 500px;
+            top: 300px;
+        }
+
+        /* SCORE */
+        #score {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 25px;
+            font-weight: bold;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            z-index: 20;
+        }
+
+        /* PHONE BUTTONS */
+        #controls {
+            position: absolute;
+            bottom: 25px;
+            right: 25px;
+            z-index: 20;
+            text-align: center;
+        }
+
+        #controls button {
+            width: 65px;
+            height: 65px;
+            margin: 4px;
+            font-size: 28px;
+            border: none;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            touch-action: none;
+        }
+
+        #controls button:active {
+            transform: scale(0.9);
+            background: lightgray;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="game">
+
+    <div id="score">Score: 0</div>
+
+    <div id="character"></div>
+
+    <div id="apple"></div>
+
+    <!-- PHONE CONTROLS -->
+    <div id="controls">
+
+        <div>
+            <button id="up">⬆️</button>
+        </div>
+
+        <div>
+            <button id="left">⬅️</button>
+            <button id="down">⬇️</button>
+            <button id="right">➡️</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="iindex.js"></script>
+
+</body>
+</html>
