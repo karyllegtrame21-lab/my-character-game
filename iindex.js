@@ -22,7 +22,6 @@ const restartGameButton = document.getElementById("restartGameButton");
 
 const fireworks = document.getElementById("fireworks");
 
-
 // ========================================
 // PHONE BUTTONS
 // ========================================
@@ -31,7 +30,6 @@ const upButton = document.getElementById("up");
 const downButton = document.getElementById("down");
 const leftButton = document.getElementById("left");
 const rightButton = document.getElementById("right");
-
 
 // ========================================
 // GAME SETTINGS
@@ -55,7 +53,6 @@ let catY = 50;
 
 let hitCooldown = false;
 
-
 // ========================================
 // MOVEMENT
 // ========================================
@@ -66,7 +63,6 @@ const movement = {
     left: false,
     right: false
 };
-
 
 // ========================================
 // ROUND NOTES
@@ -82,9 +78,8 @@ const roundNotes = {
     7: "Akala mo madali pa rin? 😈",
     8: "Wag kang kampante! 🐍😂",
     9: "Malapit ka na... or baka hindi. 😏",
-    10: "TEKA LANG—PAANO KA UMABOT DITO?! 💀😂"
+    10: "IMMORTAL YARN! 🔥🐱"
 };
-
 
 function getRoundNote() {
 
@@ -102,7 +97,6 @@ function getRoundNote() {
 
     return "Round " + round + " pa lang? Tuloy mo lang! 😈🐱";
 }
-
 
 // ========================================
 // ROUND SETUP
@@ -125,7 +119,6 @@ function setupRound() {
     createSnakes(snakeCount);
 }
 
-
 // ========================================
 // CAT POSITION
 // ========================================
@@ -136,7 +129,6 @@ function updateCat() {
     cat.style.top = catY + "px";
 }
 
-
 function keepCatInside() {
 
     const maxX = game.clientWidth - cat.offsetWidth;
@@ -145,7 +137,6 @@ function keepCatInside() {
     catX = Math.max(0, Math.min(catX, maxX));
     catY = Math.max(0, Math.min(catY, maxY));
 }
-
 
 // ========================================
 // RANDOM POSITION
@@ -169,7 +160,6 @@ function randomPosition(width, height) {
     };
 }
 
-
 // ========================================
 // CREATE APPLE
 // ========================================
@@ -191,7 +181,6 @@ function createApple() {
     apples.push(apple);
 }
 
-
 // ========================================
 // CREATE APPLES
 // ========================================
@@ -207,7 +196,6 @@ function createApples() {
     });
 
     apples = [];
-
 
     // ROUND 10+
     // Apples appear one at a time
@@ -238,7 +226,6 @@ function createApples() {
     }
 }
 
-
 // ========================================
 // CREATE SNAKE
 // ========================================
@@ -263,15 +250,11 @@ function createSnake() {
     game.appendChild(snakeElement);
 
     snakes.push({
-
         element: snakeElement,
-
         x: position.x,
         y: position.y
-
     });
 }
-
 
 // ========================================
 // CREATE SNAKES
@@ -280,16 +263,13 @@ function createSnake() {
 function createSnakes(count) {
 
     snakes.forEach(snake => {
-
         snake.element.remove();
-
     });
 
     snakes = [];
 
-
     // ROUND 10+
-    // Snakes appear slowly
+    // Snakes appear gradually
 
     if (round >= 10) {
 
@@ -316,7 +296,6 @@ function createSnakes(count) {
     }
 }
 
-
 // ========================================
 // COLLISION
 // ========================================
@@ -324,15 +303,12 @@ function createSnakes(count) {
 function isColliding(rect1, rect2) {
 
     return (
-
         rect1.left < rect2.right &&
         rect1.right > rect2.left &&
         rect1.top < rect2.bottom &&
         rect1.bottom > rect2.top
-
     );
 }
-
 
 // ========================================
 // APPLE COLLISION
@@ -364,16 +340,11 @@ function checkAppleCollision() {
                 score;
 
             if (score >= appleGoal) {
-
                 completeRound();
-
             }
-
         }
-
     });
 }
-
 
 // ========================================
 // SNAKE SPEED
@@ -381,18 +352,14 @@ function checkAppleCollision() {
 
 function getSnakeSpeed() {
 
-    // Very slow at Round 1
-    // Gradually becomes faster
+    // Slow at Round 1
+    // Gradually increases
 
     return Math.min(
-
         0.7 + ((round - 1) * 0.10),
-
         2.2
-
     );
 }
-
 
 // ========================================
 // SNAKES CRAWL TOWARD CAT
@@ -426,11 +393,7 @@ function moveSnakes() {
             catCenterY - snakeCenterY;
 
         const distance =
-            Math.sqrt(
-                dx * dx +
-                dy * dy
-            );
-
+            Math.sqrt(dx * dx + dy * dy);
 
         if (distance > 0) {
 
@@ -441,11 +404,7 @@ function moveSnakes() {
             snake.y +=
                 (dy / distance) *
                 snakeSpeed;
-
         }
-
-
-        // Keep snake inside game
 
         snake.x =
             Math.max(
@@ -465,16 +424,13 @@ function moveSnakes() {
                 )
             );
 
-
         snake.element.style.left =
             snake.x + "px";
 
         snake.element.style.top =
             snake.y + "px";
-
     });
 }
-
 
 // ========================================
 // SNAKE COLLISION
@@ -505,12 +461,9 @@ function checkSnakeCollision() {
             loseLife();
 
             break;
-
         }
-
     }
 }
-
 
 // ========================================
 // LOSE LIFE
@@ -527,7 +480,6 @@ function loseLife() {
     livesDisplay.textContent =
         lives;
 
-
     // Move cat back
 
     catX = 50;
@@ -535,17 +487,13 @@ function loseLife() {
 
     updateCat();
 
-
     // Flash cat
 
     cat.style.opacity = "0.3";
 
     setTimeout(() => {
-
         cat.style.opacity = "1";
-
     }, 300);
-
 
     // GAME OVER
 
@@ -554,11 +502,9 @@ function loseLife() {
         gameOver();
 
         return;
-
     }
 
-
-    // Protection
+    // Temporary protection
 
     setTimeout(() => {
 
@@ -566,7 +512,6 @@ function loseLife() {
 
     }, 1200);
 }
-
 
 // ========================================
 // CAT FIREWORKS
@@ -577,7 +522,6 @@ function startCatFireworks() {
     fireworks.innerHTML = "";
 
     const effects = [
-
         "🐱",
         "😺",
         "😸",
@@ -587,9 +531,7 @@ function startCatFireworks() {
         "💥",
         "🎆",
         "🎇"
-
     ];
-
 
     for (let i = 0; i < 45; i++) {
 
@@ -607,13 +549,11 @@ function startCatFireworks() {
                 )
                 ];
 
-
         item.style.left =
             Math.random() * 100 + "%";
 
         item.style.top =
             Math.random() * 100 + "%";
-
 
         item.style.setProperty(
             "--x",
@@ -627,12 +567,9 @@ function startCatFireworks() {
             "px"
         );
 
-
         fireworks.appendChild(item);
-
     }
 }
-
 
 // ========================================
 // COMPLETE ROUND
@@ -658,7 +595,6 @@ function completeRound() {
     startCatFireworks();
 }
 
-
 // ========================================
 // NEXT ROUND
 // ========================================
@@ -674,6 +610,13 @@ nextRoundButton.addEventListener(
         scoreDisplay.textContent =
             score;
 
+        // RESET LIVES EVERY ROUND
+
+        lives = STARTING_LIVES;
+
+        livesDisplay.textContent =
+            lives;
+
         catX = 50;
         catY = 50;
 
@@ -682,15 +625,14 @@ nextRoundButton.addEventListener(
         roundComplete.style.display =
             "none";
 
-        fireworks.innerHTML = "";
+        fireworks.innerHTML =
+            "";
 
         gameRunning = true;
 
         setupRound();
-
     }
 );
-
 
 // ========================================
 // START GAME
@@ -707,8 +649,7 @@ startButton.addEventListener(
 
         score = 0;
 
-        lives =
-            STARTING_LIVES;
+        lives = STARTING_LIVES;
 
         scoreDisplay.textContent =
             score;
@@ -727,10 +668,8 @@ startButton.addEventListener(
         gameRunning = true;
 
         setupRound();
-
     }
 );
-
 
 // ========================================
 // GAME OVER
@@ -751,7 +690,6 @@ function gameOver() {
         "flex";
 }
 
-
 // ========================================
 // RESTART GAME
 // ========================================
@@ -762,8 +700,9 @@ function restartGame() {
 
     score = 0;
 
-    lives =
-        STARTING_LIVES;
+    lives = STARTING_LIVES;
+
+    appleGoal = 10;
 
     scoreDisplay.textContent =
         score;
@@ -771,15 +710,11 @@ function restartGame() {
     livesDisplay.textContent =
         lives;
 
-    roundDisplay.textContent =
-        "1";
-
-    appleGoal =
-        10;
-
     appleGoalDisplay.textContent =
         appleGoal;
 
+    roundDisplay.textContent =
+        round;
 
     catX = 50;
     catY = 50;
@@ -790,15 +725,14 @@ function restartGame() {
 
     hitCooldown = false;
 
-
     gameOverScreen.style.display =
         "none";
 
     roundComplete.style.display =
         "none";
 
-    fireworks.innerHTML = "";
-
+    fireworks.innerHTML =
+        "";
 
     apples.forEach(apple => {
 
@@ -808,26 +742,21 @@ function restartGame() {
 
     });
 
-
     snakes.forEach(snake => {
 
         snake.element.remove();
 
     });
 
-
     apples = [];
 
     snakes = [];
 
+    gameRunning = false;
 
     startScreen.style.display =
         "flex";
-
-    gameRunning = false;
-
 }
-
 
 // ========================================
 // RESTART BUTTONS
@@ -843,7 +772,6 @@ restartGameButton.addEventListener(
     restartGame
 );
 
-
 // ========================================
 // KEYBOARD CONTROLS
 // ========================================
@@ -857,9 +785,7 @@ document.addEventListener(
         const key =
             event.key.toLowerCase();
 
-
         if (
-
             key === "arrowup" ||
             key === "arrowdown" ||
             key === "arrowleft" ||
@@ -868,13 +794,10 @@ document.addEventListener(
             key === "a" ||
             key === "s" ||
             key === "d"
-
         ) {
 
             event.preventDefault();
-
         }
-
 
         if (
             key === "arrowup" ||
@@ -882,9 +805,7 @@ document.addEventListener(
         ) {
 
             movement.up = true;
-
         }
-
 
         if (
             key === "arrowdown" ||
@@ -892,9 +813,7 @@ document.addEventListener(
         ) {
 
             movement.down = true;
-
         }
-
 
         if (
             key === "arrowleft" ||
@@ -902,9 +821,7 @@ document.addEventListener(
         ) {
 
             movement.left = true;
-
         }
-
 
         if (
             key === "arrowright" ||
@@ -912,12 +829,9 @@ document.addEventListener(
         ) {
 
             movement.right = true;
-
         }
-
     }
 );
-
 
 // ========================================
 // KEYBOARD RELEASE
@@ -930,16 +844,13 @@ document.addEventListener(
         const key =
             event.key.toLowerCase();
 
-
         if (
             key === "arrowup" ||
             key === "w"
         ) {
 
             movement.up = false;
-
         }
-
 
         if (
             key === "arrowdown" ||
@@ -947,9 +858,7 @@ document.addEventListener(
         ) {
 
             movement.down = false;
-
         }
-
 
         if (
             key === "arrowleft" ||
@@ -957,9 +866,7 @@ document.addEventListener(
         ) {
 
             movement.left = false;
-
         }
-
 
         if (
             key === "arrowright" ||
@@ -967,12 +874,9 @@ document.addEventListener(
         ) {
 
             movement.right = false;
-
         }
-
     }
 );
-
 
 // ========================================
 // PHONE CONTROLS
@@ -982,9 +886,6 @@ function setupPhoneButton(button, direction) {
 
     if (!button) return;
 
-
-    // START MOVING
-
     function startMove(event) {
 
         event.preventDefault();
@@ -992,64 +893,43 @@ function setupPhoneButton(button, direction) {
         if (!gameRunning) return;
 
         movement[direction] = true;
-
     }
-
-
-    // STOP MOVING
 
     function stopMove(event) {
 
         event.preventDefault();
 
         movement[direction] = false;
-
     }
 
-
-    // POINTER DOWN
-    // Works on phone + computer
+    // Pointer events work on
+    // both phones and computers
 
     button.addEventListener(
         "pointerdown",
         startMove
     );
 
-
-    // POINTER UP
-
     button.addEventListener(
         "pointerup",
         stopMove
     );
-
-
-    // POINTER CANCEL
 
     button.addEventListener(
         "pointercancel",
         stopMove
     );
 
-
-    // POINTER LEAVES BUTTON
-
     button.addEventListener(
         "pointerleave",
         stopMove
     );
 
-
-    // If finger/mouse is released
-    // somewhere else
-
     button.addEventListener(
         "pointerout",
         stopMove
     );
-
 }
-
 
 // ========================================
 // CONNECT PHONE BUTTONS
@@ -1075,7 +955,6 @@ setupPhoneButton(
     "right"
 );
 
-
 // ========================================
 // MOVE CAT
 // ========================================
@@ -1084,58 +963,38 @@ function moveCat() {
 
     if (!gameRunning) return;
 
-
     if (movement.up) {
-
         catY -= CAT_SPEED;
-
     }
-
 
     if (movement.down) {
-
         catY += CAT_SPEED;
-
     }
-
 
     if (movement.left) {
-
         catX -= CAT_SPEED;
-
     }
-
 
     if (movement.right) {
-
         catX += CAT_SPEED;
-
     }
-
 
     keepCatInside();
 
     updateCat();
-
 }
 
-
 // ========================================
-// STOP ALL MOVEMENT
+// STOP MOVEMENT
 // ========================================
 
 function stopAllMovement() {
 
     movement.up = false;
-
     movement.down = false;
-
     movement.left = false;
-
     movement.right = false;
-
 }
-
 
 // ========================================
 // GAME LOOP
@@ -1152,16 +1011,10 @@ function gameLoop() {
         checkAppleCollision();
 
         checkSnakeCollision();
-
     }
 
-
-    requestAnimationFrame(
-        gameLoop
-    );
-
+    requestAnimationFrame(gameLoop);
 }
-
 
 // ========================================
 // INITIAL STATE
