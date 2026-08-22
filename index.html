@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meowple Rush!</title>
+    <title>Meowple Rush</title>
 
     <style>
         * {
@@ -138,6 +138,12 @@
             display: none;
         }
 
+        /* PAUSE SCREEN */
+        #pauseScreen {
+            display: none;
+            z-index: 45;
+        }
+
         /* CAT FIREWORKS */
         #fireworks {
             position: absolute;
@@ -154,7 +160,6 @@
         }
 
         @keyframes catExplosion {
-
             0% {
                 transform: scale(0.2);
                 opacity: 0;
@@ -173,9 +178,18 @@
             }
         }
 
-        /* RESTART */
-        #restart {
+        /* GAME BUTTON AREA */
+        #gameButtons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
             margin-top: 12px;
+        }
+
+        #restart,
+        #pauseButton {
             padding: 12px 25px;
             font-size: 18px;
             font-weight: bold;
@@ -184,6 +198,11 @@
             background: #7b3f00;
             color: white;
             cursor: pointer;
+        }
+
+        #restart:hover,
+        #pauseButton:hover {
+            background: #a05200;
         }
 
         #instructions {
@@ -216,7 +235,6 @@
             font-size: 27px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
             cursor: pointer;
-
             touch-action: none;
             -webkit-user-select: none;
             user-select: none;
@@ -266,13 +284,23 @@
             .overlay p {
                 font-size: 15px;
             }
+
+            #gameButtons {
+                margin-top: 8px;
+            }
+
+            #restart,
+            #pauseButton {
+                font-size: 16px;
+                padding: 10px 18px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<h1>🐱 Meowple Rush! 🍎</h1>
+<h1>🐱 Meowple Rush 🍎</h1>
 
 <div id="gameInfo">
 
@@ -301,7 +329,7 @@
     <!-- START SCREEN -->
     <div id="startScreen" class="overlay">
 
-        <h2>🐱 Meowple Rush! 🍎</h2>
+        <h2>🐱 Meowple Rush 🍎</h2>
 
         <p>🍎 Collect all the apples!</p>
         <p>🐍 Avoid the snakes!</p>
@@ -309,6 +337,19 @@
 
         <button id="startButton" class="gameButton">
             ▶️ START GAME
+        </button>
+
+    </div>
+
+    <!-- PAUSE SCREEN -->
+    <div id="pauseScreen" class="overlay">
+
+        <h2>⏸️ GAME PAUSED</h2>
+
+        <p>Take a little break, cat! 🐱</p>
+
+        <button id="resumeButton" class="gameButton">
+            ▶️ RESUME
         </button>
 
     </div>
@@ -353,9 +394,19 @@
 
 </div>
 
-<button id="restart">
-    🔄 Restart Game
-</button>
+<!-- GAME BUTTONS -->
+
+<div id="gameButtons">
+
+    <button id="restart">
+        🔄 Restart Game
+    </button>
+
+    <button id="pauseButton">
+        ⏸️ PAUSE
+    </button>
+
+</div>
 
 <div id="instructions">
 
@@ -370,7 +421,6 @@
     🍎 Collect the apples and avoid the 🐍 snakes!
 
 </div>
-
 
 <!-- PHONE CONTROLS -->
 
@@ -393,7 +443,6 @@
     </div>
 
 </div>
-
 
 <script src="iindex.js"></script>
 

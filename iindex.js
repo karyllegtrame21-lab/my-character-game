@@ -9,6 +9,10 @@ const roundDisplay = document.getElementById("round");
 const startScreen = document.getElementById("startScreen");
 const startButton = document.getElementById("startButton");
 
+const pauseScreen = document.getElementById("pauseScreen");
+const pauseButton = document.getElementById("pauseButton");
+const resumeButton = document.getElementById("resumeButton");
+
 const roundComplete = document.getElementById("roundComplete");
 const roundTitle = document.getElementById("roundTitle");
 const roundNote = document.getElementById("roundNote");
@@ -44,6 +48,7 @@ let lives = STARTING_LIVES;
 let appleGoal = 10;
 
 let gameRunning = false;
+let isPaused = false;
 
 let apples = [];
 let snakes = [];
@@ -82,6 +87,7 @@ const roundNotes = {
 };
 
 function getRoundNote() {
+
     if (roundNotes[round]) {
         return roundNotes[round];
     }
@@ -123,6 +129,7 @@ function setupRound() {
 // ========================================
 
 function updateCat() {
+
     cat.style.left = catX + "px";
     cat.style.top = catY + "px";
 }
@@ -186,15 +193,14 @@ function createApple() {
 function createApples() {
 
     apples.forEach(apple => {
+
         if (apple) {
             apple.remove();
         }
+
     });
 
     apples = [];
-
-    // ROUND 10+
-    // Apples appear gradually
 
     if (round >= 10) {
 
@@ -202,7 +208,7 @@ function createApples() {
 
             setTimeout(() => {
 
-                if (gameRunning) {
+                if (gameRunning && !isPaused) {
                     createApple();
                 }
 
@@ -211,7 +217,6 @@ function createApples() {
 
     } else {
 
-        // Normal rounds
         for (let i = 0; i < appleGoal; i++) {
             createApple();
         }
@@ -224,15 +229,20 @@ function createApples() {
 
 function createSnake() {
 
-    const snakeElement = document.createElement("div");
+    const snakeElement =
+        document.createElement("div");
 
     snakeElement.className = "snake";
     snakeElement.textContent = "🐍";
 
-    const position = randomPosition(35, 25);
+    const position =
+        randomPosition(35, 25);
 
-    snakeElement.style.left = position.x + "px";
-    snakeElement.style.top = position.y + "px";
+    snakeElement.style.left =
+        position.x + "px";
+
+    snakeElement.style.top =
+        position.y + "px";
 
     game.appendChild(snakeElement);
 
@@ -255,16 +265,13 @@ function createSnakes(count) {
 
     snakes = [];
 
-    // ROUND 10+
-    // Snakes appear gradually
-
     if (round >= 10) {
 
         for (let i = 0; i < count; i++) {
 
             setTimeout(() => {
 
-                if (gameRunning) {
+                if (gameRunning && !isPaused) {
                     createSnake();
                 }
 
@@ -299,15 +306,17 @@ function isColliding(rect1, rect2) {
 
 function checkAppleCollision() {
 
-    if (!gameRunning) return;
+    if (!gameRunning || isPaused) return;
 
-    const catRect = cat.getBoundingClientRect();
+    const catRect =
+        cat.getBoundingClientRect();
 
     apples.forEach((apple, index) => {
 
         if (!apple) return;
 
-        const appleRect = apple.getBoundingClientRect();
+        const appleRect =
+            apple.getBoundingClientRect();
 
         if (isColliding(catRect, appleRect)) {
 
@@ -317,7 +326,8 @@ function checkAppleCollision() {
 
             score++;
 
-            scoreDisplay.textContent = score;
+            scoreDisplay.textContent =
+                score;
 
             if (score >= appleGoal) {
                 completeRound();
@@ -332,9 +342,6 @@ function checkAppleCollision() {
 
 function getSnakeSpeed() {
 
-    // Slow at Round 1
-    // Gradually becomes faster
-
     return Math.min(
         0.7 + ((round - 1) * 0.10),
         2.2
@@ -347,49 +354,62 @@ function getSnakeSpeed() {
 
 function moveSnakes() {
 
-    if (!gameRunning) return;
+    if (!gameRunning || isPaused) return;
 
-    const snakeSpeed = getSnakeSpeed();
+    const snakeSpeed =
+        getSnakeSpeed();
 
     snakes.forEach(snake => {
 
-        const catCenterX = catX + 30;
-        const catCenterY = catY + 30;
+        const catCenterX =
+            catX + 30;
 
-        const snakeCenterX = snake.x + 17;
-        const snakeCenterY = snake.y + 12;
+        const catCenterY =
+            catY + 30;
 
-        const dx = catCenterX - snakeCenterX;
-        const dy = catCenterY - snakeCenterY;
+        const snakeCenterX =
+            snake.x + 17;
 
-        const distance = Math.sqrt(
-            dx * dx + dy * dy
-        );
+        const snakeCenterY =
+            snake.y + 12;
+
+        const dx =
+            catCenterX - snakeCenterX;
+
+        const dy =
+            catCenterY - snakeCenterY;
+
+        const distance =
+            Math.sqrt(dx * dx + dy * dy);
 
         if (distance > 0) {
 
             snake.x +=
-                (dx / distance) * snakeSpeed;
+                (dx / distance) *
+                snakeSpeed;
 
             snake.y +=
-                (dy / distance) * snakeSpeed;
+                (dy / distance) *
+                snakeSpeed;
         }
 
-        snake.x = Math.max(
-            0,
-            Math.min(
-                snake.x,
-                game.clientWidth - 35
-            )
-        );
+        snake.x =
+            Math.max(
+                0,
+                Math.min(
+                    snake.x,
+                    game.clientWidth - 35
+                )
+            );
 
-        snake.y = Math.max(
-            0,
-            Math.min(
-                snake.y,
-                game.clientHeight - 25
-            )
-        );
+        snake.y =
+            Math.max(
+                0,
+                Math.min(
+                    snake.y,
+                    game.clientHeight - 25
+                )
+            );
 
         snake.element.style.left =
             snake.x + "px";
@@ -405,18 +425,29 @@ function moveSnakes() {
 
 function checkSnakeCollision() {
 
-    if (!gameRunning || hitCooldown) {
+    if (
+        !gameRunning ||
+        isPaused ||
+        hitCooldown
+    ) {
         return;
     }
 
-    const catRect = cat.getBoundingClientRect();
+    const catRect =
+        cat.getBoundingClientRect();
 
     for (const snake of snakes) {
 
         const snakeRect =
-            snake.element.getBoundingClientRect();
+            snake.element
+                .getBoundingClientRect();
 
-        if (isColliding(catRect, snakeRect)) {
+        if (
+            isColliding(
+                catRect,
+                snakeRect
+            )
+        ) {
 
             loseLife();
 
@@ -431,30 +462,29 @@ function checkSnakeCollision() {
 
 function loseLife() {
 
-    if (hitCooldown) return;
+    if (hitCooldown || isPaused) {
+        return;
+    }
 
     hitCooldown = true;
 
     lives--;
 
-    livesDisplay.textContent = lives;
-
-    // Move cat back to starting position
+    livesDisplay.textContent =
+        lives;
 
     catX = 50;
     catY = 50;
 
     updateCat();
 
-    // Flash cat
-
     cat.style.opacity = "0.3";
 
     setTimeout(() => {
-        cat.style.opacity = "1";
-    }, 300);
 
-    // Game Over
+        cat.style.opacity = "1";
+
+    }, 300);
 
     if (lives <= 0) {
 
@@ -463,10 +493,10 @@ function loseLife() {
         return;
     }
 
-    // Temporary protection
-
     setTimeout(() => {
+
         hitCooldown = false;
+
     }, 1200);
 }
 
@@ -492,14 +522,17 @@ function startCatFireworks() {
 
     for (let i = 0; i < 45; i++) {
 
-        const item = document.createElement("div");
+        const item =
+            document.createElement("div");
 
-        item.className = "catFirework";
+        item.className =
+            "catFirework";
 
         item.textContent =
             effects[
                 Math.floor(
-                    Math.random() * effects.length
+                    Math.random() *
+                    effects.length
                 )
                 ];
 
@@ -511,12 +544,14 @@ function startCatFireworks() {
 
         item.style.setProperty(
             "--x",
-            (Math.random() * 250 - 125) + "px"
+            (Math.random() * 250 - 125) +
+            "px"
         );
 
         item.style.setProperty(
             "--y",
-            (Math.random() * 250 - 125) + "px"
+            (Math.random() * 250 - 125) +
+            "px"
         );
 
         fireworks.appendChild(item);
@@ -531,15 +566,25 @@ function completeRound() {
 
     gameRunning = false;
 
+    isPaused = false;
+
     stopAllMovement();
 
+    pauseScreen.style.display = "none";
+
+    pauseButton.textContent =
+        "⏸️ PAUSE";
+
     roundTitle.textContent =
-        "🎉 ROUND " + round + " COMPLETE! 🎉";
+        "🎉 ROUND " +
+        round +
+        " COMPLETE! 🎉";
 
     roundNote.textContent =
         getRoundNote();
 
-    roundComplete.style.display = "flex";
+    roundComplete.style.display =
+        "flex";
 
     startCatFireworks();
 }
@@ -556,22 +601,32 @@ nextRoundButton.addEventListener(
 
         score = 0;
 
-        scoreDisplay.textContent = score;
+        scoreDisplay.textContent =
+            score;
 
-        // RESET LIVES TO 5 EVERY ROUND
+        // RESET LIVES TO 5
+        // EVERY NEW ROUND
 
         lives = STARTING_LIVES;
 
-        livesDisplay.textContent = lives;
+        livesDisplay.textContent =
+            lives;
 
         catX = 50;
         catY = 50;
 
         updateCat();
 
-        roundComplete.style.display = "none";
+        isPaused = false;
 
-        fireworks.innerHTML = "";
+        pauseButton.textContent =
+            "⏸️ PAUSE";
+
+        roundComplete.style.display =
+            "none";
+
+        fireworks.innerHTML =
+            "";
 
         gameRunning = true;
 
@@ -587,7 +642,17 @@ startButton.addEventListener(
     "click",
     function () {
 
-        startScreen.style.display = "none";
+        startScreen.style.display =
+            "none";
+
+        roundComplete.style.display =
+            "none";
+
+        gameOverScreen.style.display =
+            "none";
+
+        pauseScreen.style.display =
+            "none";
 
         round = 1;
 
@@ -595,20 +660,105 @@ startButton.addEventListener(
 
         lives = STARTING_LIVES;
 
-        scoreDisplay.textContent = score;
+        scoreDisplay.textContent =
+            score;
 
-        livesDisplay.textContent = lives;
+        livesDisplay.textContent =
+            lives;
 
-        roundDisplay.textContent = round;
+        roundDisplay.textContent =
+            round;
 
         catX = 50;
         catY = 50;
 
         updateCat();
 
+        isPaused = false;
+
+        pauseButton.textContent =
+            "⏸️ PAUSE";
+
         gameRunning = true;
 
         setupRound();
+    }
+);
+
+// ========================================
+// PAUSE GAME
+// ========================================
+
+function pauseGame() {
+
+    if (!gameRunning || isPaused) {
+        return;
+    }
+
+    isPaused = true;
+
+    gameRunning = false;
+
+    stopAllMovement();
+
+    pauseScreen.style.display =
+        "flex";
+
+    pauseButton.textContent =
+        "▶️ RESUME";
+}
+
+// ========================================
+// RESUME GAME
+// ========================================
+
+function resumeGame() {
+
+    if (!isPaused) {
+        return;
+    }
+
+    isPaused = false;
+
+    gameRunning = true;
+
+    pauseScreen.style.display =
+        "none";
+
+    pauseButton.textContent =
+        "⏸️ PAUSE";
+}
+
+// ========================================
+// PAUSE BUTTON
+// ========================================
+
+pauseButton.addEventListener(
+    "click",
+    function () {
+
+        if (isPaused) {
+
+            resumeGame();
+
+        } else {
+
+            pauseGame();
+
+        }
+    }
+);
+
+// ========================================
+// RESUME BUTTON
+// ========================================
+
+resumeButton.addEventListener(
+    "click",
+    function () {
+
+        resumeGame();
+
     }
 );
 
@@ -620,14 +770,23 @@ function gameOver() {
 
     gameRunning = false;
 
+    isPaused = false;
+
     stopAllMovement();
+
+    pauseScreen.style.display =
+        "none";
+
+    pauseButton.textContent =
+        "⏸️ PAUSE";
 
     finalRound.textContent =
         "You reached Round " +
         round +
         "! 🏆";
 
-    gameOverScreen.style.display = "flex";
+    gameOverScreen.style.display =
+        "flex";
 }
 
 // ========================================
@@ -644,13 +803,17 @@ function restartGame() {
 
     appleGoal = 10;
 
-    scoreDisplay.textContent = score;
+    scoreDisplay.textContent =
+        score;
 
-    livesDisplay.textContent = lives;
+    livesDisplay.textContent =
+        lives;
 
-    appleGoalDisplay.textContent = appleGoal;
+    appleGoalDisplay.textContent =
+        appleGoal;
 
-    roundDisplay.textContent = round;
+    roundDisplay.textContent =
+        round;
 
     catX = 50;
     catY = 50;
@@ -661,11 +824,22 @@ function restartGame() {
 
     hitCooldown = false;
 
-    gameOverScreen.style.display = "none";
+    isPaused = false;
 
-    roundComplete.style.display = "none";
+    pauseButton.textContent =
+        "⏸️ PAUSE";
 
-    fireworks.innerHTML = "";
+    gameOverScreen.style.display =
+        "none";
+
+    roundComplete.style.display =
+        "none";
+
+    pauseScreen.style.display =
+        "none";
+
+    fireworks.innerHTML =
+        "";
 
     apples.forEach(apple => {
 
@@ -675,7 +849,9 @@ function restartGame() {
     });
 
     snakes.forEach(snake => {
+
         snake.element.remove();
+
     });
 
     apples = [];
@@ -684,7 +860,8 @@ function restartGame() {
 
     gameRunning = false;
 
-    startScreen.style.display = "flex";
+    startScreen.style.display =
+        "flex";
 }
 
 // ========================================
@@ -709,11 +886,12 @@ document.addEventListener(
     "keydown",
     function (event) {
 
-        if (!gameRunning) return;
+        if (!gameRunning || isPaused) {
+            return;
+        }
 
-        const key = event.key.toLowerCase();
-
-        // Prevent browser scrolling
+        const key =
+            event.key.toLowerCase();
 
         if (
             key === "arrowup" ||
@@ -779,9 +957,8 @@ document.addEventListener(
     "keyup",
     function (event) {
 
-        const key = event.key.toLowerCase();
-
-        // UP
+        const key =
+            event.key.toLowerCase();
 
         if (
             key === "arrowup" ||
@@ -791,8 +968,6 @@ document.addEventListener(
             movement.up = false;
         }
 
-        // DOWN
-
         if (
             key === "arrowdown" ||
             key === "s"
@@ -801,8 +976,6 @@ document.addEventListener(
             movement.down = false;
         }
 
-        // LEFT
-
         if (
             key === "arrowleft" ||
             key === "a"
@@ -810,8 +983,6 @@ document.addEventListener(
 
             movement.left = false;
         }
-
-        // RIGHT
 
         if (
             key === "arrowright" ||
@@ -835,7 +1006,9 @@ function setupPhoneButton(button, direction) {
 
         event.preventDefault();
 
-        if (!gameRunning) return;
+        if (!gameRunning || isPaused) {
+            return;
+        }
 
         movement[direction] = true;
     }
@@ -903,7 +1076,9 @@ setupPhoneButton(
 
 function moveCat() {
 
-    if (!gameRunning) return;
+    if (!gameRunning || isPaused) {
+        return;
+    }
 
     if (movement.up) {
         catY -= CAT_SPEED;
@@ -944,7 +1119,7 @@ function stopAllMovement() {
 
 function gameLoop() {
 
-    if (gameRunning) {
+    if (gameRunning && !isPaused) {
 
         moveCat();
 
@@ -975,6 +1150,11 @@ appleGoalDisplay.textContent =
 roundDisplay.textContent =
     "1";
 
+pauseScreen.style.display =
+    "none";
+
 gameRunning = false;
+
+isPaused = false;
 
 gameLoop();
