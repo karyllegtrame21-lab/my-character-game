@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ginger Cat Apple Game</title>
+    <title>Meowple Rush</title>
 
     <style>
         * {
@@ -49,6 +49,7 @@
             touch-action: none;
         }
 
+        /* GINGER CAT */
         #cat {
             position: absolute;
             width: 60px;
@@ -60,6 +61,7 @@
             z-index: 10;
         }
 
+        /* APPLES */
         .apple {
             position: absolute;
             width: 35px;
@@ -71,6 +73,7 @@
             z-index: 5;
         }
 
+        /* SMALL SNAKES */
         .snake {
             position: absolute;
             width: 35px;
@@ -82,11 +85,11 @@
             z-index: 6;
         }
 
-        /* START / WIN / GAME OVER */
+        /* OVERLAYS */
         .overlay {
             position: absolute;
             inset: 0;
-            background: rgba(255, 255, 255, 0.94);
+            background: rgba(255, 255, 255, 0.95);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -131,13 +134,17 @@
             display: none;
         }
 
+        #gameOverScreen {
+            display: none;
+        }
+
         /* CAT FIREWORKS */
         #fireworks {
             position: absolute;
             inset: 0;
             pointer-events: none;
             overflow: hidden;
-            z-index: 55;
+            z-index: -1;
         }
 
         .catFirework {
@@ -147,6 +154,7 @@
         }
 
         @keyframes catExplosion {
+
             0% {
                 transform: scale(0.2);
                 opacity: 0;
@@ -158,30 +166,14 @@
             }
 
             100% {
-                transform: scale(0.8) translate(
-                        var(--x),
-                        var(--y)
-                );
+                transform:
+                        scale(0.8)
+                        translate(var(--x), var(--y));
                 opacity: 0;
             }
         }
 
-        #message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            padding: 25px;
-            background: white;
-            border: 4px solid #7b3f00;
-            border-radius: 15px;
-            font-size: 28px;
-            font-weight: bold;
-            display: none;
-            z-index: 20;
-        }
-
+        /* RESTART */
         #restart {
             margin-top: 12px;
             padding: 12px 25px;
@@ -201,7 +193,6 @@
         }
 
         /* PHONE CONTROLS */
-
         #mobileControls {
             display: none;
             margin: 12px auto 20px;
@@ -225,6 +216,7 @@
             font-size: 27px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
             cursor: pointer;
+
             touch-action: none;
             -webkit-user-select: none;
             user-select: none;
@@ -235,6 +227,7 @@
             background: #ddd;
         }
 
+        /* PHONE SCREEN */
         @media (max-width: 700px) {
 
             body {
@@ -279,7 +272,7 @@
 
 <body>
 
-<h1>🐱 Ginger Cat Apple Game 🍎</h1>
+<h1>🐱 Meowple Rush 🍎</h1>
 
 <div id="gameInfo">
 
@@ -302,24 +295,17 @@
 
 <div id="game">
 
+    <!-- CAT -->
     <div id="cat">🐱</div>
 
     <!-- START SCREEN -->
     <div id="startScreen" class="overlay">
 
-        <h2>🐱 Ginger Cat Apple Game 🍎</h2>
+        <h2>🐱 Meowple Rush 🍎</h2>
 
-        <p>
-            🍎 Collect all the apples!
-        </p>
-
-        <p>
-            🐍 Avoid the snakes!
-        </p>
-
-        <p>
-            ❤️ You have 5 lives.
-        </p>
+        <p>🍎 Collect all the apples!</p>
+        <p>🐍 Avoid the snakes!</p>
+        <p>❤️ You have 5 lives.</p>
 
         <button id="startButton" class="gameButton">
             ▶️ START GAME
@@ -349,15 +335,15 @@
     </div>
 
     <!-- GAME OVER -->
-    <div id="gameOverScreen" class="overlay" style="display:none;">
+    <div id="gameOverScreen" class="overlay">
 
         <h2>💀 GAME OVER 💀</h2>
 
-        <p id="finalRound"></p>
-
-        <p>
-            🐱 Don't give up!
+        <p id="gameOverNote">
+            PUYOT! 😂
         </p>
+
+        <p id="finalRound"></p>
 
         <button id="restartGameButton" class="gameButton">
             🔄 PLAY AGAIN
@@ -390,15 +376,18 @@
 
 <div id="mobileControls">
 
+    <!-- UP -->
     <div class="control-row">
         <button id="up">⬆️</button>
     </div>
 
+    <!-- LEFT + RIGHT -->
     <div class="control-row">
         <button id="left">⬅️</button>
         <button id="right">➡️</button>
     </div>
 
+    <!-- DOWN -->
     <div class="control-row">
         <button id="down">⬇️</button>
     </div>
