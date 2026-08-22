@@ -1,128 +1,91 @@
 /* =========================================================
    MEOWPLE RUSH
-   Main Game JavaScript
    ========================================================= */
 
 
-/* =========================================================
+/* =========================
    GAME SETTINGS
-   ========================================================= */
+========================= */
 
 const APPLE_GOAL = 10;
 const STARTING_LIVES = 5;
-
 const CAT_SPEED = 5;
-
 const NUMBER_OF_SNAKES = 4;
-
 const SNAKE_SPEED = 1.5;
-
 const SNAKE_MOVE_INTERVAL = 70;
 
 
-/* =========================================================
-   GET HTML ELEMENTS
-   ========================================================= */
+/* =========================
+   WITTY ROUND NOTES
+========================= */
+
+const roundNotes = {
+    1: "Kaya mo naman pala eh, pero bakit sa akin hirap na hirap ka, emee!!! 😂",
+    2: "Ay wow, umabot ka pa dito? 😏",
+    3: "Hindi ka pa sumusuko? Sige nga! 😂",
+    4: "Medyo seryoso ka na ah! 👀",
+    5: "INYAKITDENN! 😂",
+    6: "Uy, buhay ka pa! 😭",
+    7: "Akala mo madali pa rin? 😈",
+    8: "Wag kang kampante! 🐍😂",
+    9: "Malapit ka na... or baka hindi. 😏",
+    10: "IMMORTAL YARN! 🔥🐱"
+};
+
+
+/* =========================
+   ELEMENTS
+========================= */
 
 const game = document.getElementById("game");
-
 const cat = document.getElementById("cat");
 
 const scoreDisplay = document.getElementById("score");
-const appleGoalDisplay = document.getElementById("appleGoal");
 const livesDisplay = document.getElementById("lives");
 const roundDisplay = document.getElementById("round");
 
-const startScreen =
-    document.getElementById("startScreen");
+const startScreen = document.getElementById("startScreen");
+const roundComplete = document.getElementById("roundComplete");
+const pauseScreen = document.getElementById("pauseScreen");
+const gameOverScreen = document.getElementById("gameOverScreen");
 
-const roundComplete =
-    document.getElementById("roundComplete");
+const startButton = document.getElementById("startButton");
+const nextRoundButton = document.getElementById("nextRoundButton");
+const restartButton = document.getElementById("restart");
+const restartGameButton = document.getElementById("restartGameButton");
+const pauseButton = document.getElementById("pauseButton");
+const resumeButton = document.getElementById("resumeButton");
 
-const pauseScreen =
-    document.getElementById("pauseScreen");
+const roundTitle = document.getElementById("roundTitle");
+const roundNote = document.getElementById("roundNote");
+const gameOverNote = document.getElementById("gameOverNote");
+const finalRound = document.getElementById("finalRound");
 
-const gameOverScreen =
-    document.getElementById("gameOverScreen");
-
-const startButton =
-    document.getElementById("startButton");
-
-const nextRoundButton =
-    document.getElementById("nextRoundButton");
-
-const restartButton =
-    document.getElementById("restart");
-
-const restartGameButton =
-    document.getElementById("restartGameButton");
-
-const pauseButton =
-    document.getElementById("pauseButton");
-
-const resumeButton =
-    document.getElementById("resumeButton");
-
-const roundTitle =
-    document.getElementById("roundTitle");
-
-const roundNote =
-    document.getElementById("roundNote");
-
-const gameOverNote =
-    document.getElementById("gameOverNote");
-
-const finalRound =
-    document.getElementById("finalRound");
+const upButton = document.getElementById("up");
+const downButton = document.getElementById("down");
+const leftButton = document.getElementById("left");
+const rightButton = document.getElementById("right");
 
 
-/* =========================================================
-   MOBILE BUTTONS
-   ========================================================= */
-
-const upButton =
-    document.getElementById("up");
-
-const downButton =
-    document.getElementById("down");
-
-const leftButton =
-    document.getElementById("left");
-
-const rightButton =
-    document.getElementById("right");
-
-
-/* =========================================================
+/* =========================
    GAME VARIABLES
-   ========================================================= */
+========================= */
 
 let score = 0;
-
 let lives = STARTING_LIVES;
-
 let round = 1;
 
 let gameRunning = false;
-
 let gamePaused = false;
 
 let catX = 0;
-
 let catY = 0;
 
 let apples = [];
-
 let snakes = [];
 
 let animationFrame = null;
-
 let snakeTimer = null;
-
-
-/* =========================================================
-   MOVEMENT STATE
-   ========================================================= */
 
 const movement = {
     up: false,
@@ -132,58 +95,39 @@ const movement = {
 };
 
 
-/* =========================================================
-   INITIAL SETUP
-   ========================================================= */
-
-appleGoalDisplay.textContent = APPLE_GOAL;
-
-updateDisplay();
-
-positionCatAtStart();
-
-
-/* =========================================================
-   UPDATE DISPLAY
-   ========================================================= */
+/* =========================
+   DISPLAY
+========================= */
 
 function updateDisplay() {
 
     scoreDisplay.textContent = score;
-
     livesDisplay.textContent = lives;
-
     roundDisplay.textContent = round;
 
 }
 
 
-/* =========================================================
-   GET GAME SIZE
-   ========================================================= */
+/* =========================
+   GAME DIMENSIONS
+========================= */
 
 function getGameWidth() {
-
     return game.clientWidth;
-
 }
-
 
 function getGameHeight() {
-
     return game.clientHeight;
-
 }
 
 
-/* =========================================================
-   POSITION CAT
-   ========================================================= */
+/* =========================
+   CAT START POSITION
+========================= */
 
 function positionCatAtStart() {
 
     const width = getGameWidth();
-
     const height = getGameHeight();
 
     catX = Math.max(
@@ -197,15 +141,14 @@ function positionCatAtStart() {
     );
 
     keepCatInsideGame();
-
     updateCatPosition();
 
 }
 
 
-/* =========================================================
-   KEEP CAT INSIDE GAME
-   ========================================================= */
+/* =========================
+   KEEP CAT INSIDE
+========================= */
 
 function keepCatInsideGame() {
 
@@ -228,82 +171,78 @@ function keepCatInsideGame() {
 }
 
 
-/* =========================================================
-   UPDATE CAT POSITION
-   ========================================================= */
+/* =========================
+   UPDATE CAT
+========================= */
 
 function updateCatPosition() {
 
     cat.style.left = `${catX}px`;
-
     cat.style.top = `${catY}px`;
 
 }
 
 
-/* =========================================================
+/* =========================
    START GAME
-   ========================================================= */
+========================= */
 
 function startGame() {
 
     score = 0;
-
     lives = STARTING_LIVES;
-
     round = 1;
 
     gameRunning = true;
-
     gamePaused = false;
 
-    clearAllObjects();
+    clearObjectsOnly();
 
     positionCatAtStart();
-
     updateDisplay();
 
     startScreen.style.display = "none";
-
     roundComplete.style.display = "none";
-
     pauseScreen.style.display = "none";
-
     gameOverScreen.style.display = "none";
 
-    createRound();
+    pauseButton.textContent = "⏸️ Pause";
 
+    createRound();
     startGameLoop();
 
 }
 
 
-/* =========================================================
+/* =========================
    CREATE ROUND
-   ========================================================= */
+========================= */
 
 function createRound() {
 
     clearObjectsOnly();
 
-    score = 0;
+    /*
+       Every round starts with
+       the original 5 lives.
+    */
 
     lives = STARTING_LIVES;
+    score = 0;
 
     updateDisplay();
 
     positionCatAtStart();
 
     createApples();
-
     createSnakes();
 
 }
 
 
-/* =========================================================
+/* =========================
    CREATE APPLES
-   ========================================================= */
+========================= */
 
 function createApples() {
 
@@ -318,29 +257,23 @@ function createApples() {
 }
 
 
-/* =========================================================
-   CREATE ONE APPLE
-   ========================================================= */
+/* =========================
+   CREATE APPLE
+========================= */
 
 function createApple() {
 
     const apple = document.createElement("div");
 
     apple.className = "apple";
-
     apple.textContent = "🍎";
 
     let position;
-
     let attempts = 0;
 
     do {
 
-        position = getRandomPosition(
-            40,
-            40
-        );
-
+        position = getRandomPosition(40, 40);
         attempts++;
 
     } while (
@@ -369,44 +302,19 @@ function createApple() {
 }
 
 
-/* =========================================================
+/* =========================
    CREATE SNAKES
-   ========================================================= */
+========================= */
 
 function createSnakes() {
 
     snakes = [];
 
-    /*
-       Snakes are intentionally placed away from
-       the cat's starting location.
-
-       They are also distributed around the
-       opposite side/corners of the garden.
-    */
-
     const positions = [
-
-        {
-            x: 0.78,
-            y: 0.10
-        },
-
-        {
-            x: 0.86,
-            y: 0.68
-        },
-
-        {
-            x: 0.55,
-            y: 0.08
-        },
-
-        {
-            x: 0.18,
-            y: 0.12
-        }
-
+        { x: 0.78, y: 0.10 },
+        { x: 0.86, y: 0.68 },
+        { x: 0.55, y: 0.08 },
+        { x: 0.18, y: 0.12 }
     ];
 
     for (
@@ -424,52 +332,39 @@ function createSnakes() {
 }
 
 
-/* =========================================================
-   CREATE ONE SNAKE
-   ========================================================= */
+/* =========================
+   CREATE SNAKE
+========================= */
 
 function createSnake(anchor) {
 
     const snake = document.createElement("div");
 
     snake.className = "snake";
-
     snake.textContent = "🐍";
 
     const width = getGameWidth();
-
     const height = getGameHeight();
 
     let x =
-        Math.floor(
-            width * anchor.x
-        );
+        Math.floor(width * anchor.x);
 
     let y =
-        Math.floor(
-            height * anchor.y
-        );
+        Math.floor(height * anchor.y);
 
     x = Math.max(
         10,
-        Math.min(
-            x,
-            width - 55
-        )
+        Math.min(x, width - 55)
     );
 
     y = Math.max(
         10,
-        Math.min(
-            y,
-            height - 45
-        )
+        Math.min(y, height - 45)
     );
 
     /*
-       Extra safety:
-       never allow snake to start too close
-       to the cat.
+       Make absolutely sure that a snake
+       does not spawn directly on the cat.
     */
 
     if (
@@ -482,30 +377,23 @@ function createSnake(anchor) {
     ) {
 
         x = width - 70;
-
         y = 25;
 
     }
 
-    snake.style.left =
-        `${x}px`;
-
-    snake.style.top =
-        `${y}px`;
+    snake.style.left = `${x}px`;
+    snake.style.top = `${y}px`;
 
     game.appendChild(snake);
 
     const angle =
-        Math.random() *
-        Math.PI *
-        2;
+        Math.random() * Math.PI * 2;
 
     snakes.push({
 
         element: snake,
 
         x: x,
-
         y: y,
 
         dx:
@@ -516,17 +404,16 @@ function createSnake(anchor) {
             Math.sin(angle) *
             SNAKE_SPEED,
 
-        changeDirectionTimer:
-            0
+        changeDirectionTimer: 0
 
     });
 
 }
 
 
-/* =========================================================
+/* =========================
    RANDOM POSITION
-   ========================================================= */
+========================= */
 
 function getRandomPosition(
     objectWidth,
@@ -551,26 +438,22 @@ function getRandomPosition(
 
     return {
 
-        x:
-            Math.floor(
-                Math.random() *
-                maxX
-            ),
+        x: Math.floor(
+            Math.random() * maxX
+        ),
 
-        y:
-            Math.floor(
-                Math.random() *
-                maxY
-            )
+        y: Math.floor(
+            Math.random() * maxY
+        )
 
     };
 
 }
 
 
-/* =========================================================
+/* =========================
    DISTANCE
-   ========================================================= */
+========================= */
 
 function distance(
     x1,
@@ -580,20 +463,18 @@ function distance(
 ) {
 
     const dx = x1 - x2;
-
     const dy = y1 - y2;
 
     return Math.sqrt(
-        dx * dx +
-        dy * dy
+        dx * dx + dy * dy
     );
 
 }
 
 
-/* =========================================================
-   CHECK IF POSITION IS NEAR CAT
-   ========================================================= */
+/* =========================
+   NEAR CAT
+========================= */
 
 function isNearCat(
     x,
@@ -613,9 +494,9 @@ function isNearCat(
 }
 
 
-/* =========================================================
+/* =========================
    CLEAR OBJECTS
-   ========================================================= */
+========================= */
 
 function clearObjectsOnly() {
 
@@ -632,26 +513,14 @@ function clearObjectsOnly() {
         );
 
     apples = [];
-
     snakes = [];
 
 }
 
 
-/* =========================================================
-   CLEAR EVERYTHING
-   ========================================================= */
-
-function clearAllObjects() {
-
-    clearObjectsOnly();
-
-}
-
-
-/* =========================================================
+/* =========================
    GAME LOOP
-   ========================================================= */
+========================= */
 
 function startGameLoop() {
 
@@ -688,66 +557,49 @@ function startGameLoop() {
 }
 
 
-/* =========================================================
+/* =========================
    MOVE CAT
-   ========================================================= */
+========================= */
 
 function moveCat() {
 
     let moving = false;
 
     if (movement.up) {
-
         catY -= CAT_SPEED;
-
         moving = true;
-
     }
 
     if (movement.down) {
-
         catY += CAT_SPEED;
-
         moving = true;
-
     }
 
     if (movement.left) {
-
         catX -= CAT_SPEED;
-
         moving = true;
-
     }
 
     if (movement.right) {
-
         catX += CAT_SPEED;
-
         moving = true;
-
     }
 
     keepCatInsideGame();
-
     updateCatPosition();
 
     if (moving) {
-
         cat.classList.add("moving");
-
     } else {
-
         cat.classList.remove("moving");
-
     }
 
 }
 
 
-/* =========================================================
-   KEYBOARD CONTROLS
-   ========================================================= */
+/* =========================
+   DESKTOP KEYBOARD
+========================= */
 
 document.addEventListener(
     "keydown",
@@ -774,58 +626,39 @@ document.addEventListener(
 
         }
 
-
         if (
             key === "arrowup" ||
             key === "w"
         ) {
-
             movement.up = true;
-
         }
-
 
         if (
             key === "arrowdown" ||
             key === "s"
         ) {
-
             movement.down = true;
-
         }
-
 
         if (
             key === "arrowleft" ||
             key === "a"
         ) {
-
             movement.left = true;
-
         }
-
 
         if (
             key === "arrowright" ||
             key === "d"
         ) {
-
             movement.right = true;
-
         }
-
-
-        /*
-           Space bar = pause/resume
-        */
 
         if (
             key === " " &&
             gameRunning
         ) {
-
             togglePause();
-
         }
 
     }
@@ -839,62 +672,47 @@ document.addEventListener(
         const key =
             event.key.toLowerCase();
 
-
         if (
             key === "arrowup" ||
             key === "w"
         ) {
-
             movement.up = false;
-
         }
-
 
         if (
             key === "arrowdown" ||
             key === "s"
         ) {
-
             movement.down = false;
-
         }
-
 
         if (
             key === "arrowleft" ||
             key === "a"
         ) {
-
             movement.left = false;
-
         }
-
 
         if (
             key === "arrowright" ||
             key === "d"
         ) {
-
             movement.right = false;
-
         }
 
     }
 );
 
 
-/* =========================================================
-   RESET MOVEMENT
-   ========================================================= */
+/* =========================
+   STOP MOVEMENT
+========================= */
 
 function stopMovement() {
 
     movement.up = false;
-
     movement.down = false;
-
     movement.left = false;
-
     movement.right = false;
 
     cat.classList.remove("moving");
@@ -902,9 +720,9 @@ function stopMovement() {
 }
 
 
-/* =========================================================
-   PHONE BUTTON CONTROL
-   ========================================================= */
+/* =========================
+   MOBILE CONTROLS
+========================= */
 
 function setupMoveButton(
     button,
@@ -915,7 +733,6 @@ function setupMoveButton(
         return;
     }
 
-
     function startMove(event) {
 
         event.preventDefault();
@@ -924,19 +741,14 @@ function setupMoveButton(
             !gameRunning ||
             gamePaused
         ) {
-
             return;
-
         }
 
         movement[direction] = true;
 
-        button.classList.add(
-            "active"
-        );
+        button.classList.add("active");
 
     }
-
 
     function stopMove(event) {
 
@@ -944,45 +756,27 @@ function setupMoveButton(
 
         movement[direction] = false;
 
-        button.classList.remove(
-            "active"
-        );
+        button.classList.remove("active");
 
     }
-
-
-    /*
-       Touch
-    */
 
     button.addEventListener(
         "touchstart",
         startMove,
-        {
-            passive: false
-        }
+        { passive: false }
     );
 
     button.addEventListener(
         "touchend",
         stopMove,
-        {
-            passive: false
-        }
+        { passive: false }
     );
 
     button.addEventListener(
         "touchcancel",
         stopMove,
-        {
-            passive: false
-        }
+        { passive: false }
     );
-
-
-    /*
-       Mouse
-    */
 
     button.addEventListener(
         "mousedown",
@@ -998,12 +792,6 @@ function setupMoveButton(
         "mouseleave",
         stopMove
     );
-
-
-    /*
-       Pointer events
-       for modern phones/browsers.
-    */
 
     button.addEventListener(
         "pointerdown",
@@ -1023,34 +811,15 @@ function setupMoveButton(
 }
 
 
-/* =========================================================
-   CONNECT PHONE BUTTONS
-   ========================================================= */
-
-setupMoveButton(
-    upButton,
-    "up"
-);
-
-setupMoveButton(
-    downButton,
-    "down"
-);
-
-setupMoveButton(
-    leftButton,
-    "left"
-);
-
-setupMoveButton(
-    rightButton,
-    "right"
-);
+setupMoveButton(upButton, "up");
+setupMoveButton(downButton, "down");
+setupMoveButton(leftButton, "left");
+setupMoveButton(rightButton, "right");
 
 
-/* =========================================================
+/* =========================
    MOVE SNAKES
-   ========================================================= */
+========================= */
 
 function moveSnakes() {
 
@@ -1058,34 +827,20 @@ function moveSnakes() {
         !gameRunning ||
         gamePaused
     ) {
-
         return;
-
     }
 
-
-    const width =
-        getGameWidth();
-
-    const height =
-        getGameHeight();
-
+    const width = getGameWidth();
+    const height = getGameHeight();
 
     snakes.forEach(
         snake => {
 
             snake.changeDirectionTimer++;
 
-
-            /*
-               Occasionally change direction
-               so snakes wander around naturally.
-            */
-
             if (
                 snake.changeDirectionTimer >
-                30 +
-                Math.random() * 80
+                30 + Math.random() * 80
             ) {
 
                 const angle =
@@ -1105,15 +860,8 @@ function moveSnakes() {
 
             }
 
-
             snake.x += snake.dx;
-
             snake.y += snake.dy;
-
-
-            /*
-               Bounce off left/right walls.
-            */
 
             if (
                 snake.x <= 5 ||
@@ -1133,11 +881,6 @@ function moveSnakes() {
 
             }
 
-
-            /*
-               Bounce off top/bottom walls.
-            */
-
             if (
                 snake.y <= 5 ||
                 snake.y >= height - 40
@@ -1156,7 +899,6 @@ function moveSnakes() {
 
             }
 
-
             snake.element.style.left =
                 `${snake.x}px`;
 
@@ -1169,20 +911,19 @@ function moveSnakes() {
 }
 
 
-/* =========================================================
+/* =========================
    SNAKE TIMER
-   ========================================================= */
+========================= */
 
-snakeTimer =
-    setInterval(
-        moveSnakes,
-        SNAKE_MOVE_INTERVAL
-    );
+snakeTimer = setInterval(
+    moveSnakes,
+    SNAKE_MOVE_INTERVAL
+);
 
 
-/* =========================================================
-   APPLE COLLISION
-   ========================================================= */
+/* =========================
+   APPLE COLLISIONS
+========================= */
 
 function checkAppleCollisions() {
 
@@ -1215,10 +956,6 @@ function checkAppleCollisions() {
 
             updateDisplay();
 
-            /*
-               All apples collected.
-            */
-
             if (
                 score >= APPLE_GOAL
             ) {
@@ -1234,9 +971,9 @@ function checkAppleCollisions() {
 }
 
 
-/* =========================================================
-   SNAKE COLLISION
-   ========================================================= */
+/* =========================
+   SNAKE COLLISIONS
+========================= */
 
 function checkSnakeCollisions() {
 
@@ -1272,9 +1009,9 @@ function checkSnakeCollisions() {
 }
 
 
-/* =========================================================
-   OBJECT COLLISION
-   ========================================================= */
+/* =========================
+   COLLISION CHECK
+========================= */
 
 function objectsCollide(
     x1,
@@ -1288,59 +1025,37 @@ function objectsCollide(
 ) {
 
     return (
-
         x1 < x2 + w2 &&
-
         x1 + w1 > x2 &&
-
         y1 < y2 + h2 &&
-
         y1 + h1 > y2
-
     );
 
 }
 
 
-/* =========================================================
+/* =========================
    LOSE LIFE
-   ========================================================= */
+========================= */
 
 function loseLife() {
 
-    if (!gameRunning || gamePaused) {
-
+    if (
+        !gameRunning ||
+        gamePaused
+    ) {
         return;
-
     }
-
 
     lives--;
 
     updateDisplay();
 
-
-    /*
-       Move cat back to safe starting position.
-    */
-
     positionCatAtStart();
-
-
-    /*
-       Remove movement input.
-    */
 
     stopMovement();
 
-
-    /*
-       Give the cat a short invulnerability
-       period by temporarily hiding it.
-    */
-
     cat.style.opacity = "0.35";
-
 
     setTimeout(
         function() {
@@ -1351,7 +1066,6 @@ function loseLife() {
         700
     );
 
-
     if (lives <= 0) {
 
         endGame();
@@ -1361,43 +1075,32 @@ function loseLife() {
 }
 
 
-/* =========================================================
+/* =========================
    COMPLETE ROUND
-   ========================================================= */
+========================= */
 
 function completeRound() {
 
     if (!gameRunning) {
-
         return;
-
     }
-
 
     gameRunning = false;
 
     stopMovement();
 
-
     clearObjectsOnly();
-
 
     roundTitle.textContent =
         `🎉 ROUND ${round} COMPLETE! 🎉`;
 
+    /*
+       Restore the original witty note.
+    */
 
-    if (round >= 10) {
-
-        roundNote.textContent =
-            "🔥 IMMORTAL YARN 🔥";
-
-    } else {
-
-        roundNote.textContent =
-            `Amazing! Get ready for Round ${round + 1}!`;
-
-    }
-
+    roundNote.textContent =
+        roundNotes[round] ||
+        "You made it! 🐱";
 
     roundComplete.style.display =
         "flex";
@@ -1405,34 +1108,31 @@ function completeRound() {
 }
 
 
-/* =========================================================
+/* =========================
    NEXT ROUND
-   ========================================================= */
+========================= */
 
 function nextRound() {
 
     round++;
 
     /*
-       Lives always return to 5
-       at the beginning of every round.
+       Every new round restores
+       the original 5 lives.
     */
 
     lives = STARTING_LIVES;
-
     score = 0;
 
     gameRunning = true;
-
     gamePaused = false;
 
     updateDisplay();
 
-    roundComplete.style.display =
-        "none";
+    roundComplete.style.display = "none";
+    pauseScreen.style.display = "none";
 
-    pauseScreen.style.display =
-        "none";
+    pauseButton.textContent = "⏸️ Pause";
 
     positionCatAtStart();
 
@@ -1441,28 +1141,24 @@ function nextRound() {
 }
 
 
-/* =========================================================
-   END GAME
-   ========================================================= */
+/* =========================
+   GAME OVER
+========================= */
 
 function endGame() {
 
     gameRunning = false;
-
     gamePaused = false;
 
     stopMovement();
 
     clearObjectsOnly();
 
-
     gameOverNote.textContent =
         "PUYOT! 😂";
 
-
     finalRound.textContent =
         `You reached Round ${round}.`;
-
 
     gameOverScreen.style.display =
         "flex";
@@ -1470,22 +1166,17 @@ function endGame() {
 }
 
 
-/* =========================================================
-   PAUSE GAME
-   ========================================================= */
+/* =========================
+   PAUSE
+========================= */
 
 function togglePause() {
 
     if (!gameRunning) {
-
         return;
-
     }
 
-
-    gamePaused =
-        !gamePaused;
-
+    gamePaused = !gamePaused;
 
     if (gamePaused) {
 
@@ -1510,44 +1201,31 @@ function togglePause() {
 }
 
 
-/* =========================================================
-   RESTART GAME
-   ========================================================= */
+/* =========================
+   RESTART
+========================= */
 
 function restartGame() {
 
     stopMovement();
 
     gameRunning = false;
-
     gamePaused = false;
 
     clearObjectsOnly();
 
-
     score = 0;
-
     lives = STARTING_LIVES;
-
     round = 1;
-
 
     updateDisplay();
 
     positionCatAtStart();
 
-
-    roundComplete.style.display =
-        "none";
-
-    pauseScreen.style.display =
-        "none";
-
-    gameOverScreen.style.display =
-        "none";
-
-    startScreen.style.display =
-        "flex";
+    roundComplete.style.display = "none";
+    pauseScreen.style.display = "none";
+    gameOverScreen.style.display = "none";
+    startScreen.style.display = "flex";
 
     pauseButton.textContent =
         "⏸️ Pause";
@@ -1555,73 +1233,44 @@ function restartGame() {
 }
 
 
-/* =========================================================
+/* =========================
    BUTTON EVENTS
-   ========================================================= */
+========================= */
 
 startButton.addEventListener(
     "click",
-    function() {
-
-        startGame();
-
-    }
+    startGame
 );
-
 
 nextRoundButton.addEventListener(
     "click",
-    function() {
-
-        nextRound();
-
-    }
+    nextRound
 );
-
 
 restartButton.addEventListener(
     "click",
-    function() {
-
-        restartGame();
-
-    }
+    restartGame
 );
-
 
 restartGameButton.addEventListener(
     "click",
-    function() {
-
-        startGame();
-
-    }
+    startGame
 );
-
 
 pauseButton.addEventListener(
     "click",
-    function() {
-
-        togglePause();
-
-    }
+    togglePause
 );
-
 
 resumeButton.addEventListener(
     "click",
-    function() {
-
-        togglePause();
-
-    }
+    togglePause
 );
 
 
-/* =========================================================
-   PREVENT PHONE PAGE MOVEMENT WHILE PLAYING
-   ========================================================= */
+/* =========================
+   PREVENT PHONE SCROLLING
+========================= */
 
 document.addEventListener(
     "touchmove",
@@ -1644,9 +1293,9 @@ document.addEventListener(
 );
 
 
-/* =========================================================
-   RESIZE HANDLING
-   ========================================================= */
+/* =========================
+   RESIZE
+========================= */
 
 window.addEventListener(
     "resize",
@@ -1656,16 +1305,11 @@ window.addEventListener(
 
         updateCatPosition();
 
-        /*
-           Keep snakes inside the resized field.
-        */
-
         const width =
             getGameWidth();
 
         const height =
             getGameHeight();
-
 
         snakes.forEach(
             snake => {
@@ -1695,8 +1339,12 @@ window.addEventListener(
 );
 
 
-/* =========================================================
+/* =========================
    INITIAL STATE
-   ========================================================= */
+========================= */
+
+updateDisplay();
+
+positionCatAtStart();
 
 restartGame();
