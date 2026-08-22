@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Meowple Rush</title>
 
     <style>
+
+        /* ========================================
+           GENERAL
+        ======================================== */
+
         * {
             box-sizing: border-box;
         }
@@ -13,118 +19,280 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #fff4e6;
+
+            background:
+                    radial-gradient(circle at 10% 10%, #fff8ed 0%, transparent 30%),
+                    radial-gradient(circle at 90% 90%, #ffe4e6 0%, transparent 35%),
+                    linear-gradient(135deg, #fff7ed, #ffe9e8);
+
+            color: #5c4033;
             text-align: center;
             overflow-x: hidden;
         }
 
+
+        /* ========================================
+           TITLE
+        ======================================== */
+
         h1 {
-            margin: 12px 0 5px;
-            color: #7b3f00;
-            font-size: 28px;
+            margin: 15px 0 8px;
+
+            color: #8b5e3c;
+
+            font-size: 30px;
+
+            text-shadow:
+                    0 2px 4px rgba(139, 94, 60, 0.15);
         }
+
+
+        /* ========================================
+           GAME INFORMATION
+        ======================================== */
 
         #gameInfo {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            align-items: center;
+
+            gap: 15px;
             flex-wrap: wrap;
-            font-size: 20px;
+
+            font-size: 18px;
             font-weight: bold;
-            margin: 10px;
+
+            margin: 12px;
         }
+
+        #gameInfo div {
+            background: rgba(255, 255, 255, 0.85);
+
+            padding: 9px 16px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                    0 4px 12px rgba(120, 80, 50, 0.12);
+
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+
+        /* ========================================
+           GAME AREA
+        ======================================== */
 
         #game {
             position: relative;
+
             width: 90vw;
             max-width: 900px;
+
             height: 65vh;
             max-height: 600px;
             min-height: 400px;
+
             margin: auto;
-            background: #d9f7be;
-            border: 5px solid #5b8c3a;
-            border-radius: 15px;
+
+            background:
+                    radial-gradient(
+                            circle at 20% 20%,
+                            rgba(255,255,255,0.45) 0 20px,
+                            transparent 21px
+                    ),
+
+                    radial-gradient(
+                            circle at 80% 70%,
+                            rgba(255,255,255,0.35) 0 30px,
+                            transparent 31px
+                    ),
+
+                    #dff3c8;
+
+            border: 5px solid #8fb36b;
+
+            border-radius: 24px;
+
+            box-shadow:
+                    0 10px 30px rgba(100, 70, 40, 0.18),
+                    inset 0 0 20px rgba(255, 255, 255, 0.4);
+
             overflow: hidden;
+
             touch-action: none;
         }
 
-        /* GINGER CAT */
+
+        /* ========================================
+           CAT
+        ======================================== */
+
         #cat {
             position: absolute;
+
             width: 60px;
             height: 60px;
+
             font-size: 52px;
             line-height: 60px;
+
             text-align: center;
+
             user-select: none;
+
             z-index: 10;
+
+            filter:
+                    drop-shadow(
+                            0 4px 3px rgba(0,0,0,0.15)
+                    );
         }
 
-        /* APPLES */
+
+        /* ========================================
+           APPLES
+        ======================================== */
+
         .apple {
             position: absolute;
+
             width: 35px;
             height: 35px;
+
             font-size: 30px;
             line-height: 35px;
+
             text-align: center;
+
             user-select: none;
+
             z-index: 5;
+
+            filter:
+                    drop-shadow(
+                            0 3px 3px rgba(0,0,0,0.15)
+                    );
         }
 
-        /* SMALL SNAKES */
+
+        /* ========================================
+           SNAKES
+        ======================================== */
+
         .snake {
             position: absolute;
+
             width: 35px;
             height: 25px;
+
             font-size: 24px;
             line-height: 25px;
+
             text-align: center;
+
             user-select: none;
+
             z-index: 6;
+
+            filter:
+                    drop-shadow(
+                            0 3px 3px rgba(0,0,0,0.15)
+                    );
         }
 
-        /* OVERLAYS */
+
+        /* ========================================
+           OVERLAYS
+        ======================================== */
+
         .overlay {
             position: absolute;
+
             inset: 0;
-            background: rgba(255, 255, 255, 0.95);
+
+            background:
+                    rgba(255, 249, 245, 0.94);
+
             display: flex;
+
             flex-direction: column;
+
             justify-content: center;
+
             align-items: center;
+
             padding: 25px;
+
             z-index: 50;
+
+            backdrop-filter: blur(4px);
         }
 
         .overlay h2 {
-            color: #7b3f00;
+            color: #8b5e3c;
+
             font-size: 32px;
+
             margin: 5px 0 15px;
         }
 
         .overlay p {
             font-size: 18px;
+
             line-height: 1.5;
+
             margin: 5px;
         }
 
+
+        /* ========================================
+           GAME BUTTON
+        ======================================== */
+
         .gameButton {
             margin-top: 18px;
+
             padding: 14px 30px;
+
             font-size: 20px;
+
             font-weight: bold;
+
             border: none;
-            border-radius: 12px;
-            background: #7b3f00;
+
+            border-radius: 15px;
+
+            background: #9b6b43;
+
             color: white;
+
             cursor: pointer;
+
+            box-shadow:
+                    0 6px 15px rgba(100, 60, 30, 0.2);
+
+            transition:
+                    transform 0.15s ease,
+                    background 0.15s ease;
         }
 
         .gameButton:hover {
-            background: #a05200;
+            background: #7f5433;
+
+            transform:
+                    translateY(-2px);
         }
+
+        .gameButton:active {
+            transform:
+                    scale(0.95);
+        }
+
+
+        /* ========================================
+           START / ROUND / GAME OVER
+        ======================================== */
 
         #startScreen {
             display: flex;
@@ -138,114 +306,223 @@
             display: none;
         }
 
-        /* PAUSE SCREEN */
         #pauseScreen {
             display: none;
+
             z-index: 45;
         }
 
-        /* CAT FIREWORKS */
+
+        /* ========================================
+           CAT FIREWORKS
+        ======================================== */
+
         #fireworks {
             position: absolute;
+
             inset: 0;
+
             pointer-events: none;
+
             overflow: hidden;
+
             z-index: -1;
         }
 
         .catFirework {
             position: absolute;
+
             font-size: 28px;
-            animation: catExplosion 1.5s ease-out forwards;
+
+            animation:
+                    catExplosion 1.5s ease-out forwards;
         }
 
         @keyframes catExplosion {
+
             0% {
                 transform: scale(0.2);
+
                 opacity: 0;
             }
 
             25% {
                 transform: scale(1.4);
+
                 opacity: 1;
             }
 
             100% {
+
                 transform:
                         scale(0.8)
-                        translate(var(--x), var(--y));
+                        translate(
+                                var(--x),
+                                var(--y)
+                        );
+
                 opacity: 0;
             }
         }
 
-        /* GAME BUTTON AREA */
+
+        /* ========================================
+           RESTART + PAUSE BUTTONS
+        ======================================== */
+
         #gameButtons {
+
             display: flex;
+
             justify-content: center;
+
             align-items: center;
+
             gap: 10px;
+
             flex-wrap: wrap;
-            margin-top: 12px;
+
+            margin-top: 15px;
         }
 
         #restart,
         #pauseButton {
-            padding: 12px 25px;
-            font-size: 18px;
+
+            padding: 12px 23px;
+
+            font-size: 17px;
+
             font-weight: bold;
+
             border: none;
-            border-radius: 10px;
-            background: #7b3f00;
+
+            border-radius: 14px;
+
+            background: #9b6b43;
+
             color: white;
+
             cursor: pointer;
+
+            box-shadow:
+                    0 5px 12px rgba(100, 60, 30, 0.2);
+
+            transition:
+                    transform 0.15s ease,
+                    background 0.15s ease;
         }
 
         #restart:hover,
         #pauseButton:hover {
-            background: #a05200;
+
+            background: #7f5433;
+
+            transform:
+                    translateY(-2px);
         }
+
+        #restart:active,
+        #pauseButton:active {
+
+            transform:
+                    scale(0.95);
+        }
+
+
+        /* ========================================
+           INSTRUCTIONS
+        ======================================== */
 
         #instructions {
-            margin: 10px auto;
-            color: #555;
-            font-size: 15px;
+
+            margin: 12px auto;
+
+            color: #806b5a;
+
+            font-size: 14px;
+
+            line-height: 1.6;
         }
 
-        /* PHONE CONTROLS */
+
+        /* ========================================
+           PHONE CONTROLS
+        ======================================== */
+
         #mobileControls {
+
             display: none;
-            margin: 12px auto 20px;
-            width: 210px;
+
+            margin: 18px auto 25px;
+
+            width: 220px;
+
             user-select: none;
         }
 
         .control-row {
+
             display: flex;
+
             justify-content: center;
-            gap: 10px;
+
+            gap: 8px;
         }
 
         #mobileControls button {
-            width: 60px;
-            height: 60px;
+
+            width: 72px;
+            height: 72px;
+
             margin: 4px;
-            border: none;
-            border-radius: 15px;
-            background: white;
-            font-size: 27px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+
+            border: 2px solid #ead8c7;
+
+            border-radius: 20px;
+
+            background:
+                    rgba(255, 255, 255, 0.92);
+
+            font-size: 34px;
+
+            box-shadow:
+
+                    0 6px 12px
+                    rgba(100, 70, 40, 0.18),
+
+                    inset 0 1px 2px
+                    rgba(255,255,255,0.9);
+
             cursor: pointer;
+
             touch-action: none;
+
             -webkit-user-select: none;
+
             user-select: none;
+
+            -webkit-tap-highlight-color:
+                    transparent;
+
+            transition:
+                    transform 0.1s ease,
+                    background 0.1s ease;
         }
 
         #mobileControls button:active {
-            transform: scale(0.92);
-            background: #ddd;
+
+            transform:
+                    scale(0.90);
+
+            background:
+                    #f8eadc;
         }
 
-        /* PHONE SCREEN */
+
+        /* ========================================
+           MOBILE SCREEN
+        ======================================== */
+
         @media (max-width: 700px) {
 
             body {
@@ -253,60 +530,102 @@
             }
 
             h1 {
-                font-size: 22px;
-                margin-top: 8px;
+
+                font-size: 23px;
+
+                margin-top: 10px;
             }
 
             #gameInfo {
-                font-size: 17px;
-                gap: 12px;
+
+                font-size: 15px;
+
+                gap: 7px;
+            }
+
+            #gameInfo div {
+
+                padding:
+                        7px 11px;
             }
 
             #game {
+
                 width: 94vw;
+
                 height: 55vh;
+
                 min-height: 330px;
+
                 border-width: 4px;
+
+                border-radius: 20px;
             }
 
             #mobileControls {
+
                 display: block;
             }
 
             #instructions {
+
                 display: none;
-            }
-
-            .overlay h2 {
-                font-size: 25px;
-            }
-
-            .overlay p {
-                font-size: 15px;
-            }
-
-            #gameButtons {
-                margin-top: 8px;
             }
 
             #restart,
             #pauseButton {
-                font-size: 16px;
-                padding: 10px 18px;
+
+                font-size: 15px;
+
+                padding:
+                        10px 18px;
+            }
+
+            .overlay h2 {
+
+                font-size: 25px;
+            }
+
+            .overlay p {
+
+                font-size: 15px;
+            }
+
+            .gameButton {
+
+                font-size: 17px;
+
+                padding:
+                        12px 24px;
             }
         }
+
     </style>
 </head>
 
+
 <body>
 
-<h1>🐱 Meowple Rush 🍎</h1>
+<!-- ========================================
+     TITLE
+======================================== -->
+
+<h1>
+    🐱 Meowple Rush 🍎
+</h1>
+
+
+<!-- ========================================
+     GAME INFORMATION
+======================================== -->
 
 <div id="gameInfo">
 
     <div>
         🍎 Apples:
-        <span id="score">0</span>/<span id="appleGoal">10</span>
+        <span id="score">0</span>
+        /
+        <span id="appleGoal">10</span>
     </div>
 
     <div>
@@ -321,41 +640,91 @@
 
 </div>
 
+
+<!-- ========================================
+     GAME
+======================================== -->
+
 <div id="game">
 
+
     <!-- CAT -->
-    <div id="cat">🐱</div>
 
-    <!-- START SCREEN -->
-    <div id="startScreen" class="overlay">
+    <div id="cat">
+        🐱
+    </div>
 
-        <h2>🐱 Meowple Rush 🍎</h2>
 
-        <p>🍎 Collect all the apples!</p>
-        <p>🐍 Avoid the snakes!</p>
-        <p>❤️ You have 5 lives.</p>
+    <!-- ====================================
+         START SCREEN
+    ==================================== -->
 
-        <button id="startButton" class="gameButton">
+    <div
+            id="startScreen"
+            class="overlay"
+    >
+
+        <h2>
+            🐱 Meowple Rush 🍎
+        </h2>
+
+        <p>
+            🍎 Collect all the apples!
+        </p>
+
+        <p>
+            🐍 Avoid the snakes!
+        </p>
+
+        <p>
+            ❤️ You have 5 lives.
+        </p>
+
+        <button
+                id="startButton"
+                class="gameButton"
+        >
             ▶️ START GAME
         </button>
 
     </div>
 
-    <!-- PAUSE SCREEN -->
-    <div id="pauseScreen" class="overlay">
 
-        <h2>⏸️ GAME PAUSED</h2>
+    <!-- ====================================
+         PAUSE SCREEN
+    ==================================== -->
 
-        <p>Take a little break, cat! 🐱</p>
+    <div
+            id="pauseScreen"
+            class="overlay"
+    >
 
-        <button id="resumeButton" class="gameButton">
+        <h2>
+            ⏸️ GAME PAUSED
+        </h2>
+
+        <p>
+            Take a little break, cat! 🐱
+        </p>
+
+        <button
+                id="resumeButton"
+                class="gameButton"
+        >
             ▶️ RESUME
         </button>
 
     </div>
 
-    <!-- ROUND COMPLETE -->
-    <div id="roundComplete" class="overlay">
+
+    <!-- ====================================
+         ROUND COMPLETE
+    ==================================== -->
+
+    <div
+            id="roundComplete"
+            class="overlay"
+    >
 
         <div id="fireworks"></div>
 
@@ -369,16 +738,28 @@
             🐱💥 You survived the round! 💥🐱
         </p>
 
-        <button id="nextRoundButton" class="gameButton">
+        <button
+                id="nextRoundButton"
+                class="gameButton"
+        >
             ➡️ NEXT ROUND
         </button>
 
     </div>
 
-    <!-- GAME OVER -->
-    <div id="gameOverScreen" class="overlay">
 
-        <h2>💀 GAME OVER 💀</h2>
+    <!-- ====================================
+         GAME OVER
+    ==================================== -->
+
+    <div
+            id="gameOverScreen"
+            class="overlay"
+    >
+
+        <h2>
+            💀 GAME OVER 💀
+        </h2>
 
         <p id="gameOverNote">
             PUYOT! 😂
@@ -386,7 +767,10 @@
 
         <p id="finalRound"></p>
 
-        <button id="restartGameButton" class="gameButton">
+        <button
+                id="restartGameButton"
+                class="gameButton"
+        >
             🔄 PLAY AGAIN
         </button>
 
@@ -394,7 +778,10 @@
 
 </div>
 
-<!-- GAME BUTTONS -->
+
+<!-- ========================================
+     GAME BUTTONS
+======================================== -->
 
 <div id="gameButtons">
 
@@ -407,6 +794,11 @@
     </button>
 
 </div>
+
+
+<!-- ========================================
+     INSTRUCTIONS
+======================================== -->
 
 <div id="instructions">
 
@@ -422,27 +814,56 @@
 
 </div>
 
-<!-- PHONE CONTROLS -->
+
+<!-- ========================================
+     PHONE CONTROLS
+======================================== -->
 
 <div id="mobileControls">
 
+
     <!-- UP -->
+
     <div class="control-row">
-        <button id="up">⬆️</button>
+
+        <button id="up">
+            ⬆️
+        </button>
+
     </div>
+
 
     <!-- LEFT + RIGHT -->
+
     <div class="control-row">
-        <button id="left">⬅️</button>
-        <button id="right">➡️</button>
+
+        <button id="left">
+            ⬅️
+        </button>
+
+        <button id="right">
+            ➡️
+        </button>
+
     </div>
 
+
     <!-- DOWN -->
+
     <div class="control-row">
-        <button id="down">⬇️</button>
+
+        <button id="down">
+            ⬇️
+        </button>
+
     </div>
 
 </div>
+
+
+<!-- ========================================
+     JAVASCRIPT
+======================================== -->
 
 <script src="iindex.js"></script>
 
