@@ -9,9 +9,9 @@ const restartButton = document.getElementById("restart");
 
 // PHONE BUTTONS
 const upButton = document.getElementById("up");
-const downButton = document.getElementById("down");
+const downButton = document.getElementById("right");
 const leftButton = document.getElementById("left");
-const rightButton = document.getElementById("right");
+const rightButton = document.getElementById("down");
 
 
 // ========================================
